@@ -63,16 +63,6 @@ Note that you can also apply `mapv` to a string:
 ``` 
 The result is a vector of numbers. 
 
-**Exercise:** Copy the following definition of the function 
-`square` into the definitions panel of Nightcode (right upper panel): 
-```clojure
-(defn square
-  "Takes a number and returns its square"
-  [x]
-  (* x x))
-```
-Reload the file. Now in the REPL panel **type in** an expression, **using `mapv`**, that computes the squares of numbers `[1 3 -2]`.
-
 ### Using anonymous functions
 Maps are often used together with anonymous functions. These
 are one-time-use functions that are put together "on the fly" and not given a name. they also don't given names to their parameters, referring to them as `%1, %2, %3` - or just `%` if there is only one. 
