@@ -147,17 +147,10 @@ Then try your decryption on the following:
 
 Encryption is not particularly helpful if it preserves capitalization, punctuation, spaces between the words, and similar things that reveal a lot about the text. Thus, in order to encrypt text we will remove all the symbols other than letters and will convert all letters to lowercase. 
 
-### Converting to lowercase: calling a Java function.
-*Relevant Java functions:* [Java toLowerCase string method](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#toLowerCase--) (note that Java functions are commonly refer to as methods). 
-
-One of the advantages of using Clojure is that one can use all available Java functions and libraries directly from Clojure. For instance, we can use Java `toLowerCase` method of the `String` class to convert a string into all lowercase letters. 
-
-The syntax for using a Java method on an object is to put the method name into the prefix position (just like any Clojure function) and to precede its name with a dot: 
+### Converting to lowercase
 ```clojure
-(.toLowerCase "What is Clojure?") ; results in "what is clojure?"
+(clojure.string/lower-case "What is Clojure?") ; results in "what is clojure?"
 ``` 
-Feel free to play with other Java methods for strings: 
-[Java 8 String methods](https://docs.oracle.com/javase/8/docs/api/java/lang/String.html).  
 
 ### Removing non-letter symbols
 *Relevant functions on clojuredocs:* [filter](https://clojuredocs.org/clojure.core/filter), [filterv](https://clojuredocs.org/clojure.core/filterv), [odd?](https://clojuredocs.org/clojure.core/odd_q)
