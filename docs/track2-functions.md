@@ -51,6 +51,24 @@ ASCII codes for lowercase letters are in order: `(int \a)` is 97, `(int \b)` is 
 Because of that, to convert a letter to an integer between 0 and 25 according to its position in the alphabet, we just need to subtract the ASCII value of `\a` from it:
 
 ```clojure
+(facts "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc"
+  (fact "character a is the first letter, in position 0"
+    (core/to-int \a) => 0)
+  (fact "character b is the second letter, in position 1"
+      (core/to-int \b) => 1))
+
+(facts "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc"
+  (tabular
+    (core/to-int ?char) => ?result
+    ?char ?result
+    \a    0
+    \b    1
+    \c    2
+    \d    3))
+
+```
+
+```clojure
 (defn to-int
   "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc."
   [c]
