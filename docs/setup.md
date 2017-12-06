@@ -44,14 +44,14 @@ Com isso criamos um alias para este namespace, esta é uma boa prática pois evi
 
 > O autotest vai executar os testes a cada mudança no código :) 
 
-7) Adicionar um novo teste com o Midje (e remover o teste do clojure.test gerado)
+7) Adicionar um novo teste no arquivo core_test.clj com o Midje (e remover o teste do clojure.test gerado)
 ``` clojure
 (fact "this will fail"
   1 => 2)
 
 ```
 
-No seu terminal veja que o novo teste j foi executado e deve ter um resultado como:
+No seu terminal veja que o novo teste já foi executado e deve ter um resultado como:
 ```
 FAIL "this will fail" at (core_test.clj:7)
 Expected:
