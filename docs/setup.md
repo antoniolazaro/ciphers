@@ -1,13 +1,13 @@
 
 # Setup
 
-1) Criar um novo projeto clojure com leiningen
+1) Criar um novo projeto clojure com [leiningen](https://leiningen.org)
 
 
 Criar um diretório para o projeto e nele executar no terminal:
 `$ lein new cipher`
 
-2) Abrir/Importar o projeto no IntelliJ
+2) Abrir/Importar o projeto no [IntelliJ] https://www.jetbrains.com/idea/download/
 
 3) Editar o arquivo project.clj para adicionar o [`midje`](https://github.com/marick/Midje) como dependência do projeto. E adicionar o plugin `lein-midje` para executarmos os testes.
 
