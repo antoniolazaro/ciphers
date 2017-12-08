@@ -56,7 +56,9 @@ Because of that, to convert a letter to an integer between 0 and 25 according to
     (core/to-int \a) => 0)
   (fact "character b is the second letter, in position 1"
       (core/to-int \b) => 1))
-
+```
+This test could be improved with tabular, because we probably will have lots of examples
+```clojure
 (facts "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc"
   (tabular
     (core/to-int ?char) => ?result
@@ -67,13 +69,12 @@ Because of that, to convert a letter to an integer between 0 and 25 according to
     \d    3))
 
 ```
-
 ```clojure
 (defn to-int
   "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc."
-  [c]
+  [letter-char]
   (let [ascii-a (int \a)]
-    (- (int c) ascii-a)))
+    (- (int letter-char) ascii-a)))
 ``` 
 Take a look at the function and make sure you understand how it works. Try it on a few lowercase letters. 
 Also note that we added a description of the function, a so-called doc-string. It is located after the function name and before the parameters.
