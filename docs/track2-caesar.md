@@ -187,7 +187,7 @@ only letters in it, all letters converted to lowercase, as in the example below:
 ``` 
 The sequences of steps that the function needs to perform is:
 
-1. Convert the string to lowercase letters using `toLowerCase` (note: this function works on a string)
+1. Convert the string to lowercase letters using `clojure.string/lower-case` (note: this function works on a string)
 2. filter out non-letter characters using `filterv`
 3. Convert the result back to a string using `apply str`. 
 
