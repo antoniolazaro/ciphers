@@ -1,28 +1,28 @@
-# Overview of Clojure. 
+# Visão Geral de Clojure.
 
-## Clojuredocs 
+## Clojuredocs
 
-Clojure has excellent documentation that was put together by Clojure programmers: [Clojuredocs: community-powered documentation and examples repository](https://clojuredocs.org/)
+Clojure possui uma excelente documentação que foi montada pelos programadores Clojure: [Clojuredocs: community-powered documentation and examples repository](https://clojuredocs.org/)
 
-Most of the functions you will be using are listed in [Clojuredocs Quick Reference](https://clojuredocs.org/quickref). The lesson provides links to functions used in each subsection. 
+Maior parte das funções que você irá utilizar estão listadas no [Guia de referência rápida do Clojuredocs](https://clojuredocs.org/quickref). A lição provê links para as funções utilizadas em cada subseção.
 
-Documentation for each function comes with a list of examples, related functions at the bottom of the page, and even some comments and discussion. Examples have both straightforward common cases and unusual edge cases (if applicable). 
+A documentação para cada função vem com uma lista de exemplos, funções relacionadas no fundo da página e até alguns comentários e discussões. Exemplos possuem casos de exemplos mais comuns e alguns casos mais específicos (se aplicáveis).
 
-We recommend that you take your time to look through the first few examples - and might even try them out! It is quite common to have several browser tabs open with different function descriptions. 
+Nós recomendamos que você tire um tempo para olhar para os primeiros exemplos - e talvez até tentá-los! É bem comum ter várias abas do navegador abertas com descrições de diferentes funções.
 
-Clojuredocs are very helpful, please use them! 
+Clojuredocs são muito úteis, por favor utilize-os!
 
-## About this lesson
+## Sobre essa lição
 
-This lesson is intended to be a self-contained introduction to Clojure using fun cipher examples. It walks you through most of the commonly used Clojure functions, gives you an opportunity to write your own through a series of suggested exercises, and finally gives you an example of an encryption to try to break (i.e. attempt to find the key and the decryption) using the tools you have learned. 
+Esta lição foi projetada para ser uma introdução independente ao Clojure utilizando alguns exemplos divertidos de criptografia. Ele irá passar pelas funções mais utilizadas em Clojure, te derá uma de escrever suas próprias através de uma série de exercícios sugeridos, e finalmente te dará um exemplo de encriptação para tentar quebrar (i.e. tentar achar a chave e tentar decriptografar) utilizando as ferramentas que você aprendeu.
 
-Even though the examples are "toy" examples, and not a real-life encryption, the Clojure features and approaches that you learn would be helpful for any data analysis and data processing. 
+Apesar dos exemplos serem apenas exemplos de "brincadeira", e não uma encriptaçã da vida real, as funcionalidades de Clojure e abordagens que você aprenderá serão úteis para qualquer análise e processamento de dados.
 
-We encourage you to:
+Nós te encorajamos a:
 
-1. Use this lesson as the guide to your learning, not as a rigid set of steps. Take as much time as you want to explore the material, you don't have to finish it or reach any particular milestone. 
-2. Try things out. Clojure REPL is a good way to play around with examples. 
-3. Ask questions. Mentors are here to answer your questions or explain results that seem confusing or discuss different approaches to a problem. 
-4. You might want to work in pairs, especially on the later parts of the lesson. 
- 
-**Next:** [Clojure data types and functions](track2-functions.md)
+1. Utilize esta lição como um guia para o seu aprendizado, não um conjunto rígido de passos. Leve quanto tempo for necessário para explorar o material, você não precisa finalizá-lo ou alcançar algum sprint particular.
+2. Experimente as coisas. Clojure REPL é uma boa maneira de brincar com alguns exemplos.
+3. Faça perguntas. Mentores estão aí para responder suas perguntar ou explicar resultados que possam parecer confusos ou discutir diferentes abordagens para o seu problema.
+4. Você provavelmente irá querer trabalhar em pares, especialmente nas partes posteriores da lição.
+
+**Próximo:** [Tipos de dados e funções em Clojure](track2-functions.md)
