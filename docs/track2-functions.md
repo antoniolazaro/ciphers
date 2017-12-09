@@ -1,65 +1,67 @@
-# Part 1: Clojure data types and functions
+# Parte 1: Tipos de dados e funções em Clojure
 
-## Clojure datatypes
+## Tipos de dados em Clojure
 
-Clojure is a functional language on top of the Java programming language. Thus Clojure data types are Java data types under the hood. This provides the convenience of using Java methods to work with Java types, but also requires type conversions to maintain consistency with Java types.
+Clojure é uma linguagem funcional que funciona por cima da linguagem de programação Java. Assim, os tipos de dados em Clojure são tipos de dados em Java por debaixo dos panos. Isso provê o conforto de utilizar métodos em Java para trabalhar com os tipos de dados Java, mas também requer conversões para manter a consistência com os tipos de Java.
 
-Ciphers that we will be exploring in this lesson work with letters that are represented as a character `char` type. However, they are treated as integer numbers `int` to make mathematics of encryption work. Letters form strings, which are a data type different from characters. 
+A criptografia que iremos explorar nessa lição trabalha com letras que são representadas como um caracted do tipo `char`. No entanto, elas são tratadas como números inteiros `int` para fazer a matemática da criptografia funcionar. Letras formam strings, que são um tipo de dado diferente de caracteres.
 
-## Defining Clojure constants and functions
+## Definindo constantes e funções em Clojure
 
-Constants are declared using the keyword `def`:
+Constantes são declaradas utilizando a palavra reservada `dev`:
 ```clojure
 (def answer 42)
 ```
 
-Clojure functions are declared as an expression in parentheses that starts `defn` keyword, followed by the function's name, a vector of parameters (in square brackets), and the body of the function that specifies what the function returns. For instance, the following definition
+Funções em Clojure são declaradas como uma expressão entre parênteses que iniciam com a palavra reservada `defn`, seguidas pelo nome da função, um vetor de parâmetros (entre colchetes), e o corpo da função que especifica o que a função retorna. Por exemplo, a seguinte definição
+
 
 ```clojure
-(defn f 
-  [x y] 
+(defn f
+  [x y]
   (+ x y 100))
 ```
-defines a function `f` that takes two parameters, `x` and `y`, and returns their sum plus `100`. 
+define uma função `f` que recebe dois parâmetros, `x` e `y`, e retorna a suma deles mais `100`.
 
-You can call this function as 
+Você pode chamar essa função como
 ```clojure 
 (f 2 3)
 ```
-This will return `105`. 
 
-**Exercise:** Write a function `g` that takes two numbers `x` and `y` and returns `x` times `10` plus `y`. 
+Isso irá retornar `105`.
 
-**Exercise:** Look up how [`if`](https://clojuredocs.org/clojure.core/if) works in Clojure and returns the absolute value of `x - y`.
+**Exercício:** Escreva uma função `g` que recebe dois números `x` e `y` e retorna `x` vezes `10` mais `y`.
 
-## Converting between `int` and `char`
+**Exercício:** Olhe como [`if`](https://clojuredocs.org/clojure.core/if) funciona em clojure e retorne o valor absoluto de `x - y`.
 
-*Relevant functions on clojuredocs*: [int](https://clojuredocs.org/clojure.core/int), [char](https://clojuredocs.org/clojure.core/char),
+## Conversão entre `int` e `char`
+
+*Funções relevantes no clojuredocs*: [int](https://clojuredocs.org/clojure.core/int), [char](https://clojuredocs.org/clojure.core/char),
 [doc](https://clojuredocs.org/clojure.repl/doc)
 
-Now we will write some
-conversion functions between `int` and `char` types. 
+Agora nós iremos escrever algumas funções de conversão entre os tipos `int` e `char`.
 
-The conversion that we would like to accomplish is to represent the 26 letters of the alphabet as numbers `0, 1, 2,..., 25`, where `a = 0`, `b = 1`, etc. 
+A conversão que nõs gostaríamos de realizar é para representar as 26 letras do alfabeto como números `0, 1, 2,..., 25`, onde `a = 0`, `b = 1`, etc.
 
-Characters in Clojure are written with a backslash in the front. For instance, a character`x` is written as `\x`. 
+Caracteres em Clojure são escritos com uma contra barra na frente. Por exemplo, o caractere `x` é escrito como `\x`.
 
-Since characters are encoded by their [ASCII values](https://en.wikipedia.org/wiki/ASCII#Code_chart),
-converting a character to an `int` gives its ASCII value.
-For instance, `(int \c)`is 99. 
-ASCII codes for lowercase letters are in order: `(int \a)` is 97, `(int \b)` is 98, etc. 
-Because of that, to convert a letter to an integer between 0 and 25 according to its position in the alphabet, we just need to subtract the ASCII value of `\a` from it:
+Como os caracteres são condificados pelos seus [valores ASCII](https://en.wikipedia.org/wiki/ASCII#Code_chart), converter um caractere para um `int` retorna seu valor ASCII.
+Por exemplo, `(int \c)` é 99.
+Código ASCII para letras minúsculas estão em ordem: `(int \a)` é 97, `(int \b)` é 98, etc.
+Por causa disso, para converter uma letra para um inteiro entre 0 e 25 de acordo com a sua posição no alfabeto, nós precisamos apenas subtrair dele o valor ASCII de `\a`:
 
 ```clojure
-(facts "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc"
-  (fact "character a is the first letter, in position 0"
+(facts "recebe um caractere minúsculo e retorna sua posição no alfabeto: a = 0, b = 1, etc"
+  (fact "o caractere a é a primeira letra, na posição 0"
     (core/to-int \a) => 0)
-  (fact "character b is the second letter, in position 1"
+  (fact "o caractere b é a segunda letra, na posição 1"
       (core/to-int \b) => 1))
 ```
-This test could be improved with tabular, because we probably will have lots of examples
+
+Este teste pode ser melhorado com `tabular`, porque nós provavelmente teremos vários exemplos
+
 ```clojure
-(facts "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc"
+(facts "recebe um caractere minúsculo e retorna sua posição no alfabeto: a = 0, b = 1, etc"
   (tabular
     (core/to-int ?char) => ?result
     ?char ?result
@@ -71,16 +73,17 @@ This test could be improved with tabular, because we probably will have lots of 
 ```
 ```clojure
 (defn to-int
-  "takes a lowercase letter character and returns its position in the alphabet: a = 0, b = 1, etc."
+  "recebe uma letra minúscola e retorna sua posição no alfabeto: a = 0, b = 1, etc."
   [letter-char]
   (let [ascii-a (int \a)]
     (- (int letter-char) ascii-a)))
-``` 
-Take a look at the function and make sure you understand how it works. Try it on a few lowercase letters. 
-Also note that we added a description of the function, a so-called doc-string. It is located after the function name and before the parameters.
-You can look up the doc-string of a function using `(doc function-name)`. For instance, `(doc to-int)` prints out the doc-string for the `to-int` function.
+```
 
-**Exercise:** Write a reverse conversion function `to-char`, i.e. a function that takes a number between 0 and 25 (inclusive) and returns the corresponding lowercase letter. For instance, `(to-char 3)` should return `\d`.  
+Dê uma olhada na função e tenha certeza de que você entendeu como ela funciona. Teste ela com algumas letras minúsculas.
+Também note que nós adicionamos uma descrição para a função, chamada de *doc-string*. Ela fica localizada depois do nome da função e antes de seus parâmetros.
+Você pode dar uma olhada na doc-string da função utilizando `(doc function-name)`. Por exemplo, `(doc to-int)` imprime a doc-string para a função `to-int`.
 
-**Previous:** [Overview of Clojure](track2-functional-overview.md)  
-**Next:** [Caesar cipher; Clojure higher order functions](track2-caesar.md)
+**Exercício:** Escreva a função de conversão reversa `to-char`, i.e. uma função que recebe um número entre 0 e 25 (inclusive) e retorna o caractere minúsculo correspondente. Por exemplo, `(to-char 3)` deveria retornar `\d`.
+
+**Anterior:** [Overview of Clojure](track2-functional-overview.md)
+**Próximo:** [Caesar cipher; Clojure higher order functions](track2-caesar.md)
