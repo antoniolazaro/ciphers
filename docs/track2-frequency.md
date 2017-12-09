@@ -105,8 +105,6 @@ Now going back to descriptions of `map` and `filter`, you would notice that they
 ```
 Also note that `mapv` and `filterv` aren't lazy (such functions are called *eager*), so replacing `filter` by `filterv` above would lead to an infinite evaluation. 
 
-**To stop Nightcode infinite evaluation**, use a **Stop** button in the REPL panel (on the right). You may need to click **Run with REPL** afterwards to get the REPL prompt back. 
-
 Feel free to explore laziness more by studying [sequences functions in clojuredocs](https://clojuredocs.org/quickref). 
 
 We will be using a finite range to compute frequencies of letters, but we will come back to potentially infinite lazy sequences in the next section on Vigenere cipher. 
