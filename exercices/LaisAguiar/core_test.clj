@@ -1,7 +1,9 @@
 (ns cipher.core-test
   (:require [clojure.test :refer :all]
             [cipher.core :as core]
-            [midje.sweet :refer :all]))
+            [midje.sweet :refer :all]
+            [clojure.string :as str])
+  (import [java.lang Character]))
 
 (fact
   (tabular
@@ -51,9 +53,8 @@ pbbxcvo"))
   (core/decrypt "radyjgtxhpsncpbxrvtctgpaejgedhtegdvgpbbxcvapcvjpvtrdbqxcxcv
 iwtpeegdprwpqxaxinpcsxcitgprixktstktadebtciduphrgxeixcvapcvjp
 vtlxiwpctuuxrxtcipcsgdqjhixcugphigjrijgtudgbjaixiwgtpstsegdvg
-pbbxcvo") => '(nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil))
+pbbxcvo") => [\a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z])
 
 (fact
   (core/decrypt "ahixblmaxmabgzpbmayxtmaxklmatmixkvaxlbgmaxlhnetgwlbgzlmaxm
-  ngxpbmahnmmaxphkwltgwgxoxklmhiltmtee") => '(nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil))
-
+  ngxpbmahnmmaxphkwltgwgxoxklmhiltmtee") => [\a \b \c \d \e \f \g \h \i \j \k \l \m \n \o \p \q \r \s \t \u \v \w \x \y \z])

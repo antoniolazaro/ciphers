@@ -56,5 +56,5 @@ pbbxcvo")
 
 (defn decrypt
   [text]
-  (map #(println (caesar-decrypt text (key-getter (first (first (take-three text))) %))) alphabet))
+  (map #(caesar-decrypt text (key-getter (first (first (take-three text))) %))) alphabet)
 
