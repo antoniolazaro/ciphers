@@ -1,218 +1,214 @@
-# Caesar cipher
+# [Cifra de César](https://pt.wikipedia.org/wiki/Cifra_de_C%C3%A9sar)
 
-## Letter shift 
-*Relevant functions:* [+](https://clojuredocs.org/clojure.core/%2B), [-](https://clojuredocs.org/clojure.core/-), [mod](https://clojuredocs.org/clojure.core/mod)
+## Substituição de letras
+*Funções relevantes:* [+](https://clojuredocs.org/clojure.core/%2B), [-](https://clojuredocs.org/clojure.core/-), [mod](https://clojuredocs.org/clojure.core/mod)
 
-Caesar cipher works by shifting the alphabet by a given number of positions to the left, wrapping around at the end. 
-The key for the cipher is how many positions the letters are shifted by. 
-For instance, if the key is 3 then `a` is replaced by `d`, `b` by `e`, etc. Here is the shift of the entire alphabet:
+Cifra de César funciona deslocando o alfabeto em um número de posições para esquerda, retornando para o início ao chegar no limite de caracteres, formando um ciclo.
+A chave para a cifra é o número de posições que as letras são movidas. Por exemplo, se a chave é 3 então `a` é substituido por `d`, `b` por `e` etc. Aqui está a substituição do alfabeto inteiro:
 ```
 abcdefghijklmnopqrstuvwxyz
 defghijklmnopqrstuvwxyzabc
 ```
 
-In order to write a function `shift` that shifts a letter
-by a given number, we need to:
+Para escrever a função `shift` que move uma letra em um dado número de posições, nós precisamos:
 
-1. Convert the letter to an integer number using `to-int` function.
-2. Add n to it.
-3. Take the result modulo 26 (that would allow us to wrap around). For instance, if the letter is `x` (position 23 in the alphabet, where `a` is 0), and the shift is 3, the result would be 23 + 3 = 26. The largest letter is `z`, at the position 25, so 26 should result in 0. Taking the result modulo 26 accomplishes this task. 
-4. After computing the position, we need to convert it back to a character by applying the `to-char` function that you wrote earlier. 
+1. Converter a letra para um inteiro utilizando a função `to-int`;
+2. Adicionar `n` a ele;
+3. Pegue o resultado módulo 26 (que nos permitirá voltar ao início). Por exemplo, se a letra é `x` (posição 23 do alfabeto, onde `a` é 0), e iremos mover 3 posições, então o resultado seria 23 + 3 = 26. A maior letra é `z`, na posição 25, então 26 deveria resultar em 0. Utilizar o resultado módulo 26 realiza essa tarefa;
+4. Depois de computar a posição, nós precisamos converte-la de volta para um caractere aplicando a função `to-char` que você escreveu anteriormente.
 
-The function that performs modulo arithmetic is `mod`. Here are a few examples of how it works:
+A função que realiza o módulo aritmético é `mod`. Aqui há alguns exemplos de como ela funciona:
 ```clojure
-(mod 7 26) ; result: 7
-(mod 27 26) ; result: 1
-(mod 55 26) ; result: 3
-(mod -5 26) ; result: 21
+(mod 7 26) ; resultado: 7
+(mod 27 26) ; resultado: 1
+(mod 55 26) ; resultado: 3
+(mod -5 26) ; resultado: 21
 ```
 
-**Exercise:** Write a function `shift` according to the description above. Some examples for how it should work:
+**Exercício:** Escreva uma função `shift` de acordo com a descrição acima. Alguns exemplos de como ela deveria funcionar:
+
 ```clojure
-(shift \a 3) ; result \d
-(shift \b 20) ; result \v
-(shift \z 3) ; result \c
+(shift \a 3) ; resulta \d
+(shift \b 20) ; resulta \v
+(shift \z 3) ; resulta \c
 ```
-Note: if you shift by a negative number, you are performing a reverse operation. For instance, `(shift \d -3)` gives you `\a`. Thus decryption is just using the same function, but with the opposite (negative) key.  
 
-## Working with words: sequences, `map`, `mapv`
-*Relevant functions:* [map](https://clojuredocs.org/clojure.core/map), [mapv](https://clojuredocs.org/clojure.core/mapv)
+Nota: se você move com um número negativo, você está realizando a operação reversa. Por exemplo, `(shift \d -3)` te dá `\a`. Portanto a decriptação é apenas utilizar a mesma função, mas com uma chave oposta (negativa).
 
-Now you can "encrypt" a letter, but you probably want to encrypt words. If you were writing a program in python or Java, you probably would be thinking of writing a loop. However, in Clojure we use *higher-order functions* that traverse sequences for us, and we just need to specify what operation we would like to perform on each element. 
+## Trabalhando com palavras: sequências, `map`, `mapv`
+*Funções relevantes:* [map](https://clojuredocs.org/clojure.core/map), [mapv](https://clojuredocs.org/clojure.core/mapv)
 
-`map` and `mapv` are such higher-order functions. They take in a sequence of elements and a function, and return a sequence that results from applying the given function to each element.  
+Agora você pode "encriptar" uma letra, mas você provavelmente quer encriptar palavras. Se você estivesse escrevendo um programa em Python ou Java, você provavelmente estaria pensando em um *loop*. No entanto, em Clojure, nós utilizaremos *funções de alta ordem* que atravessam sequências para nós, e nós apenas precisamos especificar que operação nós queremos realizar em cada elemento.
 
-This sounds very abstract, so let's look at an example with `mapv`. We use a function `inc` (increment) that takes an integer and returns the next integer, i.e. `(inc 1)` returns 2. now we are going to increment each element of a sequence of numbers
-using `mapv`:
+`map` e `mapv` são as tais funções de alta ordem. Eles recebem uma sequência de elementos e uma função, e retornam uma sequência que resulta de aplicar a função dada a cada elemento.
+
+Isso pode soar muito abstrato, então vamos olhar um exemplo com `mapv`. Nós iremos utilizar a função `inc` (incremento)  que recebe um inteiro e retorna o próximo inteiro, i.e. `(inc 1)` retorna 2. Agora nós iremos incrementar cada elemento de uma sequência de números utilizando `mapv`:
+
 ```clojure
-(mapv inc [1 3 2]) ; returns [2 4 3]
+(mapv inc [1 3 2]) ; retorna [2 4 3]
 ```
-Here `[1 3 2]` and `[2 4 3]` are *vectors* of numbers. This is the easiest way of giving Clojure a collection of elements in a specific order. What you get back is a vector in which each element of the given vector is incremented by 1. 
 
-The difference between `map` and `mapv` is that they return the result in a slightly different way: `map` returns a sequence in its most general form, and `mapv` returns its result as a particular sequential collection known as a *vector*. Vectors are slightly easier to work with for our examples, so we are using `mapv`. 
+Aqui `[1 3 2]` e `[2 4 3]` são *vetores* de números. Esta é a maneira mais fácil de utilizar em Clojure uma coleção de elementos em uma ordem específica.  O que você recebe de volta é um vetor que cada elemento do vetor dado é incrementado em 1.
 
-**Exercise:** What do you expect when you type in Clojure REPL?
+A diferença entre `map` e `mapv` é que eles retornam o resultado de uma maneira levemente diferente: `map` retorna uma sequência na sua forma mais geral, e `mapv` retorna o resultado como uma coleção sequencial conhecida como um *vetor*. Vetores são levemente mais fáceis de trabalhar para nossos exemplos, então nós iremos utilizar `mapv`.
+
+**Exercício:**  O que você espera quando você escreve no Clojure REPL?
+
 ```clojure
 (mapv to-int [\a \b \c])
-``` 
-Try it, see if the result is what you were expecting. If it's not, make sure to understand what it is and why. 
+```
+Teste, veja se o resultado é o que você está esperando. Se não for, tenha certeza de entender o que é e o porque.
 
-Note that you can also apply `mapv` to a string:
+Note que você também pode aplicar `mapv` a uma string:
 ```clojure
 (mapv to-int "abc")
-``` 
-The result is a vector of numbers. 
+```
+O resultado é um vetor de números.
 
-### Using anonymous functions
-Maps are often used together with anonymous functions. These
-are one-time-use functions that are put together "on the fly" and not given a name. they also don't given names to their parameters, referring to them as `%1, %2, %3` - or just `%` if there is only one. 
+### Utilizando funções anônimas
+*Maps* são normalmente utilizados junto com funções anônimas. Estas são funções que você utiliza uma vez que são juntas na hora e não tem um nome. Elas também não dão nomes aos seus parâmetros, referenciando-os como `%1, %2, %3` - ou apenas `%` se existe apenas um.
 
-They are often used with higher-order functions, such as `mapv`. Here is an example:
+Elas são normalmente utilizadas com funções de alta ordem, como `mapv`. Aqui há um exemplo:
 ```clojure
 (mapv #(* % %) [1 3 -2])
-``` 
-This returns `[1 9 4]` (the vector of squares of all given numbers, just like in the exercise above). 
-The anonymous function passed to the `map` is `#(* % %)`. It is equivalent to the `square` function above. The `%` sign here refers to the parameter of the function, it is used instead of `x`. The `#` in front of the expression indicates that this is a function. 
-      
-**Exercise:** Use `mapv` and an anonymous function to take the opposite of each number in a given vector. For instance, if the vector is `[2 -1 0 3]`, the result would be `[-2 1 0 -3]`.
+```
+Isso retorna `[1 9 4]` (o vetor de quadrados de todos os números dados, assim como no exercício acima).
+A função anônima passada para o `map` é `#(* % %)`. É equivalente a função quadrática. O sinal `%` aqui referencia ao parâmetro da função, ela é utilizada no lugar do `x`. O `#` na frente da expressão indica que é uma função.
 
-### Converting from vectors to strings
-`mapv` returns its result as a vector, but it would be really useful to get it as a string. The conversion is non-obvious, and you can skip the explanations of how it works. Here is the code for it: 
+**Exercício:** Utilize `mapv` e uma função anônima para retornar o oposto de cada número dado em um vetor. Por exemplo, se o vetor é`[2 -1 0 3]`, o resultado seria `[-2 1 0 -3]`.
+
+### Convertendo de vetores para strings
+
+`mapv` returna seu resultado como um vetor, mas seria bem útil tê-lo como uma string. A conversão não é óbvia, e você pode pular as explicações de como isso funciona. Aqui está o código para isso:
 ```clojure
-(apply str [\w \o \r \d]) ; results in a string "word"
+(apply str [\w \o \r \d]) ; resulta em uma string "word"
 ```
 
-**Explanations of `apply` (you can skip this):**
-Here is the [clojuredocs description of `apply`](https://clojuredocs.org/clojure.core/apply) The function takes a vector and passes individual elements of it to a function, as if they were written separately, and not in a vector. For instance, `(+ [1 2 3])` is an error since `[1 2 3]` is a vector, and `+` doesn't work on vectors. What we want is `(+ 1 2 3)`, that's a valid summation and results in `6`. Using 
-`(apply + [1 2 3])` works exactly like this: it passes the three arguments to `+` individually, and not as a vector. 
+**Explicações do `apply` (você pode pular isso):**
 
-Now we are done with the nitty-gritty details for our ciphers, and are ready to do some encryption and decryption.
+Aqui está a [descrição do clojuredocs sobre `apply`](https://clojuredocs.org/clojure.core/apply). A função recebe um vetor e passa os valores individuais para a função, como se elas fossem escritas separadamente, e não em um vetor. Por exemplo, `(+ [1 2 3])` retorna um erro já que `[1 2 3]` é um vetor, e `+` não funciona com vetores. O que nós queremos é `(+ 1 2 3)`, que é uma soma válida e retorna `6`. Utilizando `(apply + [1 2 3])` funciona exatamente assim: ele passa os três argumentos para `+` individualmente, não como em um vetor.
 
-### Encrypting with Caesar cipher
+Agora terminamos com os detalhes mais importantes para as nossas cifras, e estamos prontos para fazermos alguma encriptação e decriptação.
 
-Now we can encrypt words with Caesar cipher. Let's say we want to encrypt the word "apple" by shifting the alphabet by 20. We need to do the following steps:
+### Encriptando com as cifras de César
 
-1. use `mapv` to shift each letter in the sequence by 20 positions; we can write the actual shifting as an anonymous function that uses the function `shift` that we wrote earlier.
-2. use `apply str` to convert the result from a sequence to a string. 
+Agora nós podemos encriptar palavras com a cifra de César. Vamos dizer que queremos encriptar a palavra "apple" movendo o alfabeto em 20 posições. Nós precisamos fazer os seguintes passos:
 
-Feel free to write this out on paper or in Nightcode before you look at the solution below. 
+1. Utilize `mapv` para mover cada letra em uma sequência de 20 posições; nós podemos escrever a mudança de posição como uma função anônima que utiliza a função `shift` que nós escrevemos anteriormente;
+2. Utilize `apply str` para converter o resultado de uma sequência para uma string.
 
-```clojure 
-(def s (mapv #(shift % 20) s)) ; encrypt the sequence
-(def result (apply str s)) ; convert to a string
+Sinta-se livre para escrever isso em um papel ou em um editor de texto antes de olhar para a solução abaixo.
+
+```clojure
+(def s (mapv #(shift % 20) s)) ; encripta a sequência
+(def result (apply str s)) ; converte para uma string
 ```
-The result, `"ujjfy"`, is what the encryption of "apple" with the key `20`. 
+O resultado `"ujjfy"`, é a encriptação de "apple" com uma chave `20`.
 
-Instead of saving intermediate results in variables, you can
-also write all the steps in one line of code:
-```clojure 
+Ao invés de salvar os resultados intermediários em variáveis, você pode escrever todos os passos em uma linha de código:
+
+```clojure
 (apply str (mapv #(shift % 20) "apple"))
 ```
-The latter style is more common in Clojure.
+Este último estilo é mais comum em Clojure.
 
-Of course, we want to encrypt different words, not just "apple", and use keys other than `20`. Thus, we want to write 
-a function that takes a word and a number `k`, and shifts the word by `k`. Here `k` serves as a key for the cipher. 
+Naturalmente, nós queremos encriptar palavras diferentes, não apenas "apple", e utilizar chaves que não sejam `20`. Deste modo, nós queremos escrever uma função que recebe uma palavra e um número `k`, e move a palavra em `k`. Aqui `k` serve como uma chave para a cifra.
 
-**Exercise** Below is the start of a function that encrypts 
-a word `w` with a key `k`. Fill in the body of the function and test it on some examples. 
-```clojure 
+**Exercício:** Abaixo está o começo da função que encripta uma palavra `w` com uma chave `k`. Preencha o corpo da função e teste com alguns exemplos.
+```clojure
 (defn caesar-encrypt
-  "encrypting a word w with a key k using Caesar cipher"
+  "encriptando uma palavra w com uma chave k utilizanado a cifra de César"
   [w k]
-                                     ) 
+                                     )
 ```
-Don't forget to 
-write all functions in the right upper panel of Nightcode, save and reload file, and test the function in the REPL. 
 
-Make sure that `(caesar-encrypt "apple" 20)` 
-returns the same result as the expression that you wrote 
-earlier, and that passing different words (all lower-case letters, no spaces) and different keys gives you different encryptions. 
+Não se esqueça de escrever todas as funções em um editor de texto, salvar e testar a função no REPL.
 
-## Decrypting with Caesar cipher
-Encryption is good only if we can later decrypt the text. 
+Tenha certeza que `(caesar-encrypt "apple" 20)` retorna o mesmo resultado que a expressão que você escreveu antes, e que passando diferentes palavras (todas em letra minúscula, sem espaços) e diferentes chaves te dá encriptaçõs diferentes.
 
-**Exercise** Based on the function `caesar-encrypt`, write a
-function `caesar-decrypt` that takes an encrypted word (all lower-case, no spaces or other symbols) and a key and returns 
-its decryption. Recall how we can use the same `shift` function for decryption. 
+## Decriptando com a cifra de César
+Encriptação é boa apenas se nós podemos decriptar o texto.
 
-Test that `(caesar-decrypt "ujjfy" 20)` returns `"apple"`.
-Then try your decryption on the following:
+**Exercício:** Baseado na função `caesar-encrypt`, escreva uma função `caesar-decrypt` que recebe uma palavra encriptada (toda em letra miníscula, sem espaçcos e outros símbolos) e uma chave, e retorna sua encriptação. Lembre-se que a gente pode utilizar a mesma função `shift` para decriptação.
+
+Teste que `(caesar-decrypt "ujjfy" 20)` retorna `"apple"`.
+
+Então tente decriptar o seguinte:
 
 - `(caesar-decrypt "gtxyts" 5)`
-- `(caesar-decrypt "mvytebolbsnqo" 10)` 
+- `(caesar-decrypt "mvytebolbsnqo" 10)`
 
-**Exercise** Encrypt your own examples and post them on slack (with the key), then try to decrypt other participants' examples posted there. Before you post your own, make sure they decrypt correctly. 
+**Exercício:** Encripte seus próprios exemplos e os poste no slack (com a chave), e então tente decriptar os exemplos de outros participantes postados lá. Antes de postar o seu próprio, tenha certeza que eles decriptam corretamente.
 
-## Working with strings that have other symbols
+## Trabahando com strings que possuem outros símbolos
 
-Encryption is not particularly helpful if it preserves capitalization, punctuation, spaces between the words, and similar things that reveal a lot about the text. Thus, in order to encrypt text we will remove all the symbols other than letters and will convert all letters to lowercase. 
+Encriptação não é particulamente útil se ela preserva letras maiúsculas, pontuação, espaços entre as palavras, e coisas similares que revelam muito sobre o texto. Portanto, em order de encriptar o texto nós iremos remover todos os símbolos que não sejam letras e iremos convertes as letras em minúsculas.
 
-### Converting to lowercase
+### Convertendo para letras minúsculas
 ```clojure
-(clojure.string/lower-case "What is Clojure?") ; results in "what is clojure?"
-``` 
+(clojure.string/lower-case "What is Clojure?") ; resulta em "what is clojure?"
+```
 
-### Removing non-letter symbols
-*Relevant functions on clojuredocs:* [filter](https://clojuredocs.org/clojure.core/filter), [filterv](https://clojuredocs.org/clojure.core/filterv), [odd?](https://clojuredocs.org/clojure.core/odd_q)
+### Removendo os símbolos que não são letras
+*Funções relevantes no clojuredocs:* [filter](https://clojuredocs.org/clojure.core/filter), [filterv](https://clojuredocs.org/clojure.core/filterv), [odd?](https://clojuredocs.org/clojure.core/odd_q)
 <br />
-*Relevant Java functions:* [isLetter](https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isLetter-char-)
+*Função Jave relevante:* [isLetter](https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isLetter-char-)
 
-Now we are going to use another Clojure higher-level function, `filterv`, to remove all the non-letter character from a string.  It takes a function that returns a true/false value and a vector, and returns a new vector with only those elements of the given one for which the function returned a true value. 
+Agora iremos utilizar outra função de alta ordem, `filterv`, para remover todas os caracteres que não são letras de uma string. Ela revebe uma função que retorna um valor `true` ou `falso` e um vetor, e retorna um novo vetor somente com aqueles elementos que a função passada retornou `true`.
 
-For example, we can use a function `odd?` that works as follows: `odd? 5` returns `true`, `odd? 4` returns `false`. 
-If we want to keep only odd integers from a given sequence, 
-we can use `filterv` with `odd?`:
+Por exemplo, se nós quisermos utilizar a função `odd?` (ímpar) que funciona assim: `odd? 5` retorna `true`, `odd? 4` retorna `false`. Se nós quisermos manter apenas os inteiros ímpares de uma dada sequência, nós podemos utilizar `filterv` com `odd?`.
+
 ```clojure
-filterv odd? [6 7 -1 0 5]) ; results in [7 -1 5]
+filterv odd? [6 7 -1 0 5]) ; resulta em [7 -1 5]
 ```
 
-Note that `filterv` is a vector analog of a more common (but less convenient in our case) function `filter`, just like `mapv` is a vector analog of `map`.
+Note que `filterv` é um vetor análógico de uma função mais comum (mas menos conveniente no nosso caso) `filter`, assim como `mapv` é um vetor analógico de `map`.
 
-Just like `mapv`, `filterv` can also take an anonymous function:
+Assim como `mapv`, `filterv` também pode receber funções anônimas:
 ```clojure
-(filterv #(< % 5) [3 6 5 8 0]) ; results in [3 0]
+(filterv #(< % 5) [3 6 5 8 0]) ; resulta em [3 0]
 ```
-The anonymous function `#(< % 5)` returns true if its argument is strictly less than `5` and false otherwise. 
 
-We will be using a Java method of the Character class `isLetter` to check if a character is a letter. There is a slight difference in how this method is defined in Java: it's method not attached to any object, just to the Character class (it's a so-called static method), and so the syntax for calling it is a bit different:
+A função anônima `#(< % 5)` retorna verdadeiro se o argumento é menor ou igual a `5` e falso ao contrário.
+
+Nós iremos utilizar o método Java da classe `Character` para checar se o caractere é uma letra. Existem algumas diferenças leves em como este método é definido em Java: não é um método que está relacionado a nenhum objeto, como na classe `Character` (é então chamado um método estático), e a sintaxe para chamá-lo é um pouco diferente:
 ```clojure
 (Character/isLetter \a) ; true
 (Character/isLetter \?) ; false
 ```
 
-**Exercise:** write a function `get-letters` that takes a string with any symbols in it, and returns a string of of 
-only letters in it, all letters converted to lowercase, as in the example below: 
+**Exercício:** escreva uma função `get-letters` que recebe uma string com qualquer símbolo nela, e retorna uma string contendo apenas letras, onde todas as letras são converidas para minúsculas, como no exemplo abaixo:
 ```clojure
 (get-letters "Hello, friend!") ; "hellofriend"
-``` 
-The sequences of steps that the function needs to perform is:
+```
+A sequência de passos que você precisa reproduzir é:
 
-1. Convert the string to lowercase letters using `clojure.string/lower-case` (note: this function works on a string)
-2. filter out non-letter characters using `filterv`
-3. Convert the result back to a string using `apply str`. 
+1. Converta a string para letras minúsculas utilizando `clojure.string/lower-case` (nota: esta função funciona apenas em uma string);
+2. Filtre todos os caracteres que não são letras utilizando `filterv`;
+3. Converta o resultado de volta para uma string utilizando `apply str`;
 
-You might want to first try out the steps in REPL, and then put it all together in a function.  
+Você pode querer primeiramente tentar os passos no REPL, e então juntá-los em uma função.
 
-## Encrypting and decrypting text with Caesar cipher
-Now you are ready to do encryption and decryption with Caesar cipher on entire strings of text. The result would be all lowercase with no punctuation marks, but still readable.
+## Encriptando e decriptando texto com a cifra de César
+Agora você está pronta para fazer a encriptação e decriptação com a cifra de César em strings inteiras de texto. O resultado será tudo em letra minúsculas e sem sinais de pontuação, mas ainda estará legível.
 
-The sequence of steps for encryption would require you to:
+A sequência de passos para encriptação irá requerer você que:
 
-1. Use `get-letters` to get a string only letters (in lower case) from the text that you are trying to encrypt. 
-2. Encrypt this string using your `caesar-encrypt` function.
+1. Utilize `get-letters` para pegar uma string somente com letras (minúsculas) do texto que você está tentando encriptar;
+2. Encripte esta string utilizando sua função `caesar-encrypt`.
 
-As a test example, `"Hello, friend!"` with the key 5 encrypts to `"mjqqtkwnjsi"`. 
+Como um exemplo de teste, `"Hello, friend!"` com a chave 5 encripta para `"mjqqtkwnjsi"`.
 
-Decryption doesn't require filtering out other symbols and converting to lowercase since encrypted strings are already of the right format, so you can use your `caesar-decrypt` function. 
+Decriptar não requer filtrar os símbolos e convertê-los para minúculos já que as strings encriptadas já estão no formato correto, então você pode utilizar a função `caesar-decrypt`.
 
-Try decrypting the following: 
+Tente decriptografar o seguinte:
 
 **TO-DO**: add
 
-## What's next?  
-Encryption and decryption is easy to do if you know the key (the amount of alphabet shift). But what do you do if you don't know it? The next section shows you how you can break Caesar cipher without a key using Clojure hashmaps.  
+## E agora?
+Encriptação e decriptação são fáceis de fazer se você sabe a chave (a quantidadade que irá mover no alfabeto). Mas e o que fazer se você não sabe? A próxima seção mostra como você pode quebrar a cifra de César sem uma chave utilizando *hashmaps* em Clojure.
 
 **Next:** [Breaking Caesar cipher: hashmaps](track2-frequency.md)
 <br />
-**Previous:** [Clojure data types and functions](track2-functions.md)
+**Previous:** [Tipos de dados e funções em Clojure](track2-functions.md)
 
