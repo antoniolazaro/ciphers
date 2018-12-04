@@ -1,11 +1,15 @@
-# Vigenere cipher
+# Cifra de Vignere
 
-## Overview of the cipher
-Vigenere cipher addresses two main weaknesses of Caesar cipher: Caesar cipher has only 26 keys, and all occurrences of a letter are always encoded by the same letter in the encrypted text. 
+## Resumo da cifra
+_Vigenere cipher addresses two main weaknesses of Caesar cipher: Caesar cipher has only 26 keys, and all occurrences of a letter are always encoded by the same letter in the encrypted text._
+A cifra de Vignere resolve duas fraquezas principais da cifra de César: a de César tem apenas 26 chaves, e todas as ocorrências de uma letra são sempre encodadas pela mesma letra no texto encriptado.
 
-Here is how it works: we pick a key which is a word. Let's use the word "cipher". The phrase we would like to encrypt is "Welcome to ClojureBridge!", which turns into "welcometoclojurebridge" after removing non-letters and converting to all lowercase. 
+_Here is how it works: we pick a key which is a word. Let's use the word "cipher". The phrase we would like to encrypt is "Welcome to ClojureBridge!", which turns into "welcometoclojurebridge" after removing non-letters and converting to all lowercase._
+Como funciona: nós escolhemos uma chave que é uma palavra. Vamos usar a palavra "cipher". A frase que gostaríamos de encriptar é "Welcome to ClojureBridge!", que se torna "welcometoclojurebridge" depois de remover caracteres especiais e de converter tudo para minúsculo.
 
-Now imagine taking the phrase that you would like to encrypt and then writing the key word under it as many time as needed to get the same length:
+_Now imagine taking the phrase that you would like to encrypt and then writing the key word under it as many time as needed to get the same length:_
+Agora imagine pegar a frase que você gostaria de encriptar e então escrever a palavra-chave quantas vezes forem necessárias para atingir o mesmo comprimento:
+
 ```
 welcometoclojurebridge
 cipherciphercipherciph
