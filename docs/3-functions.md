@@ -85,5 +85,6 @@ Você pode dar uma olhada na doc-string da função utilizando `(doc function-na
 
 **Exercício:** Escreva a função de conversão reversa `to-char`, i.e. uma função que recebe um número entre 0 e 25 (inclusive) e retorna o caractere minúsculo correspondente. Por exemplo, `(to-char 3)` deveria retornar `\d`.
 
-**Anterior:** [Visão Geral de Clojure](track2-functional-overview.md)
-**Próximo:** [Caesar cipher; Clojure higher order functions](track2-caesar.md)
+**Próximo:** [Caesar cipher; Clojure higher order functions](4-caesar.md)
+<br />
+**Anterior:** [Visão Geral de Clojure](2-functional-overview.md)

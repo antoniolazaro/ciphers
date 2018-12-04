@@ -208,7 +208,7 @@ Tente decriptografar o seguinte:
 ## E agora?
 Encriptação e decriptação são fáceis de fazer se você sabe a chave (a quantidadade que irá mover no alfabeto). Mas e o que fazer se você não sabe? A próxima seção mostra como você pode quebrar a cifra de César sem uma chave utilizando *hashmaps* em Clojure.
 
-**Next:** [Breaking Caesar cipher: hashmaps](track2-frequency.md)
+**Next:** [Breaking Caesar cipher: hashmaps](5-frequency.md)
 <br />
-**Previous:** [Tipos de dados e funções em Clojure](track2-functions.md)
+**Previous:** [Tipos de dados e funções em Clojure](3-functions.md)
 

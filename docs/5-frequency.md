@@ -198,6 +198,6 @@ Let's suppose `\p` is an encryption for `\e` (this may or may not be true). We h
 
 Obviously, Caesar cipher isn't at all secure. However, there is a more complicated, better cipher that extends the idea of an alphabet shift: it's Vigenere cipher explained in the next section. 
 
-**Next:** [Vigenere cipher](track2-vigenere.md)
+**Next:** [Vigenere cipher](6-vigenere.md)
 <br />
-**Previous:** [Caesar cipher](track2-caesar.md)
+**Previous:** [Caesar cipher](4-caesar.md)

@@ -148,6 +148,6 @@ This was a long day! However, I do recommend that now you take a few minutes and
 
 #### Thanks for attending ClojureBridge!!! 
 
-**Back to the beginning:** [Overview](track2-functional-overview.md)
+**Back to the beginning:** [Setup do Projeto](1-setup.md)
 <br />
-**Previous:** [Breaking Caesar cipher](track2-frequency.md)
+**Previous:** [Breaking Caesar cipher](5-frequency.md)
