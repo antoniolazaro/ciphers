@@ -1,65 +1,63 @@
 # Visão Geral de Clojure.
 
-## Principles of functional languages
+## Princípios de linguagens funcionais
 
-Clojure is a functional language. This means that rather 
-than updating variables in memory, programs work by function composition. Functions in a functional language are treated as other elements of the language (numbers, strings, etc.), i.e. they can be stored in a variable, passed to other functions, returned from other functions, and even created at run time. This is often refers to as *functions being first class citizens in the language*. 
+Clojure é uma linguagem funcional. Isso significa que no lugar de 
+atualizar variáveis em memória, programas funcionam através de composição de funções. Funções em uma linguagem funcional são tratadas como os outros elementos da linguagem (números, strings, etc.), e.g. elas podem ser armazenadas em uma variável, passadas para outras funções, retornadas de outras funções e até criadas em tempo de execução. Isso é geralmente referenciado como *funções sendo cidadãos de primeira classe na linguagem*. 
 
-Variables and data structures in Clojure are immutable by default, i.e. they never change in place. Every time a modification is needed, a new object is created. For instance, if you add an element to a list, a new list is created with the new element added, and the old list stays the same. 
+Variáveis e estruturas de dados em Clojure são imutáveis por padrão, e.g. elas nunca mudam localmente. Toda vez que uma modificação é necessária um novo objeto é criado. Por exemplo, se você adiciona um elemento a uma lista, uma nova lista é criada com o novo elemento adicionado e a antiga lista permanece a mesma. 
 
-This may seem like an inefficient approach, but underneath there is a very efficient sharing of the parts that didn't change, but it's invisible to the programmer. Clojure vectors are in particular efficient in this sense. 
+Isso pode parecer uma abordagem ineficiente, mas por trás há um compartilhamento muito eficiente das partes que não mudaram e que são invisíveis para o programador. Vetores de Clojure são em particular eficientes nesse sentido. 
 
-The benefit of immutability is that it is easier to know exactly what's happening in a program since every object that a program references is always the same as when it was originally created. This also makes it easier to incorporate concurrency since there is much less of a need to keep track of simultaneous updates, so much less of a need to lock objects. In fact, one of the main design goals of Clojure was the ease of concurrent programming with minimal locking. 
+O benefício da imutabilidade consiste na facilidade de saber exatamente o que está acontecendo em um programa já que todo objeto referenciado é sempre o mesmo desde o momento de sua criação. Isso também facilita a inserção de concorrência uma vez que há muito menos necessidade de acompanhar atualizações simultâneas, consequentemente muito menos necessidade de bloquear objetos. Na verdade, um dos principais objetivos de design de Clojure era facilitar programação concorrente com o mínimo de bloqueio. 
 
-## Clojure and Java
+## Clojure e Java
 
-Clojure compiles into Java bytecode and runs on Java Virtual Machine (JVM). There is a convenient way to call Java methods and use Java libraries in Clojure. This means that Clojure can use any predefined Java functionality. 
+Clojure é compilado em bytecode Java e executado em Java Virtual Machine (JVM). Existe uma maneira conveniente de chamar métodos Java e usar bibliotecas Java em Clojure. Isso significa que Clojure pode usar qualquer funcionalidade Java predefinida.
 
-Since Clojure is implemented on top of Java, Clojure objects (numbers, strings, lists, etc.) are implemented as Java datatypes. 
-Unfortunately, this also means that Clojure error messages are Java exceptions and refer to Java datatypes. This makes them less understandable to those not familiar with Java. We will try to help you navigate through error messages if they become confusing. 
+Como Clojure é implementado sobre Java, seus objetos (números, strings, listas, etc.) são implementados como tipos de dado Java. Injelizmente, isso também significa que as mensagens de erro de Clojure são exceções Java e referem-se aos tipos de dados Java. Isso as tornam menos compreensíveis para aqueles que não estão familiarizados com Java. Nós vamos tentar ajudá-la a navegar pelas mensagens de erro caso elas se tornem confusas. 
 
-## Clojure Syntax 
+## Sintaxe Clojure 
 
-Clojure is a language in the Lisp family. Lisp languages are functional, dynamically typed languages with a simple uniform syntax. In Lisp languages there are a handful of keywords (such as Clojure `def` for defining a variable) and no predefined operations: even arithmetic operations, such as `+`, `-`, etc. are functions in Clojure. 
+Clojure é uma linguagem na família Lisp. Linguagens Lisp são funcionais e dinamicamente tipadas com uma sintaxe simples e uniforme. Em linguagens Lisp existem palavras-chave (como o `def` de Clojure para definir uma variável) e nenhuma operação pré-definida: mesmo operações aritiméticas como `+`, `-`, etc. são funções em Clojure.
 
-Clojure syntax follows prefix notation: a Clojure expression is surrounded with parentheses, the first element in the parentheses is a function name, and what follows is the function arguments:
+A sintaxe Clojure segue a notação de prefixo: uma expressão Clojure é envolvida com parênteses, o primeiro elemento entre os parênteses é o nome da função e os que seguem são os argumentos da função:
 ```clojure
 (+ 2 5)
 ```
-is the call to a function `+` with the arguments `2` and `5`, which returns `7`. 
+é a chamada da função `+` com os argumentos `2` e `5`, que retorna `7`. 
 
-Many functions in Clojure take a variable number of arguments: 
+Muitas funções em Clojure recebem um número variável de argumentos: 
 ```clojure
 (+ 2 5 3)
 ```
-passes three arguments to `+`, and returns `10`. 
+passa três argumentos para `+` e retorna `10`. 
 
-Since functions in Clojure are first-class citizens, they can be passed to other functions. For instance,
+Como funções em Clojure são cidadãos de primeira classe, elas podem ser passadas para outras funções. Por exemplo,
 ```clojure
 (filter odd? [2 3 -1 8])
 ```
-is a call to a function `filter` that takes a function that returns true/false values and a collection of elements, and returns a new collection that only contains the elements for which the function returned `true`. In this case, only the elements `3` and `-1` will be in the resulting collection. 
+é uma chamada para a função `filter` que recebe uma função que retorna valores true/false e uma coleção de elementos, e retorna uma nova coleção contendo apenas os elementos para os quais a função retornou `true`. Neste caso, apenas os elementos `3` e `-1` estarão na coleção resultante. 
 
-All languages have their own naming and formatting conventions. Clojure (and other Lisp languages) use the following:
+Todas as linguagens possuem suas próprias convenções de nomenclatura e formatação. Clojure (e outras linguagens Lisp) usa as seguintes:
 
-* Multi-word variable names use dashes, not underscores or camel-casing: `find-min-key`.
-* Function names tend to be verbs, not nouns: `take`, `reduce`, etc.
-* Names of functions that return boolean (true/false) values end with a question mark: `odd?`, `number?`. 
-* Parentheses all close on the last line of a nested expression, as in the follwoing function definition: 
+* Variáveis com mais de uma palavra usam traços, não underscores ou camel-casing: `encontra-menor-chave`.
+* Nomes de funções tendem a ser verbos, não substantivos: `take`, `reduce`, etc.
+* Nomes de funções que retornam valores booleanos (true/false) terminam com um ponto de interrogação: `odd?`, `number?`. 
+* Parênteses fecham na última linha da expressão aninhada, como na seguinte definição:
 ```clojure
-(defn square
+(defn quadrado
   [x]
   (* x x))
 ```
 
-Comments start with `;` and go until the end of the line:
+Comentários começam com `;` e vão até o final da linha:
 ```clojure
-(def n 10) ; n is the number of elements
+(def n 10) ; n é o número de elementos
 ```
-Traditionally we use `;;` to start a comment that takes the 
-entire line. 
+Tradicionalmente nós usamos `;;` para começar um comentário que ocupa uma linha inteira.
 
-For more on Clojure style please see [The Clojure Style Guide](https://github.com/bbatsov/clojure-style-guide) (and you might want to revisit this link after you are done with this lesson). 
+Para mais informações sobre o estilo Clojure consulte [O Guia de Estilo Clojure](https://github.com/rodriguescelio/clojure-style-guide/blob/pt-BR/README.md) (e você pode querer revisitar este link depois de concluir essa lição). 
 
 ## ClojureDocs
 
