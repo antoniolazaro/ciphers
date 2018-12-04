@@ -1,4 +1,4 @@
-# Parte 1: Tipos de dados e funções em Clojure
+# Tipos de dados e funções em Clojure
 
 ## Tipos de dados em Clojure
 

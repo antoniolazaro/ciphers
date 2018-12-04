@@ -1,16 +1,16 @@
 # Visão Geral de Clojure.
 
-## Clojuredocs
+## ClojureDocs
 
-Clojure possui uma excelente documentação que foi montada pelos programadores Clojure: [Clojuredocs: community-powered documentation and examples repository](https://clojuredocs.org/)
+Clojure possui uma excelente documentação que foi montada pelos programadores Clojure: [ClojureDocs: community-powered documentation and examples repository](https://clojuredocs.org/)
 
-Maior parte das funções que você irá utilizar estão listadas no [Guia de referência rápida do Clojuredocs](https://clojuredocs.org/quickref). A lição provê links para as funções utilizadas em cada subseção.
+Maior parte das funções que você irá utilizar estão listadas no [Guia de referência rápida do ClojureDocs](https://clojuredocs.org/quickref). A lição provê links para as funções utilizadas em cada subseção.
 
 A documentação para cada função vem com uma lista de exemplos, funções relacionadas no fundo da página e até alguns comentários e discussões. Exemplos possuem casos de exemplos mais comuns e alguns casos mais específicos (se aplicáveis).
 
 Nós recomendamos que você tire um tempo para olhar para os primeiros exemplos - e talvez até tentá-los! É bem comum ter várias abas do navegador abertas com descrições de diferentes funções.
 
-Clojuredocs são muito úteis, por favor utilize-os!
+ClojureDocs são muito úteis, por favor utilize-os!
 
 ## Sobre essa lição
 
