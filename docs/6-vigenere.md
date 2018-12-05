@@ -14,19 +14,24 @@ Agora imagine pegar a frase que você gostaria de encriptar e então escrever a 
 welcometoclojurebridge
 cipherciphercipherciph
 ```
-Let's take `w` (the first letter of the text we are encrypting) and `c` (the letter of the keyword right under it). Then `w` is encrypted as taking its integer value, `22`, adding the integer value of `c`, `2`, adding them together, and taking the result modulo 26 if it is greater than 25. The result will be `24`, which corresponds to the letter `y`. 
+_Let's take `w` (the first letter of the text we are encrypting) and `c` (the letter of the keyword right under it). Then `w` is encrypted as taking its integer value, `22`, adding the integer value of `c`, `2`, adding them together, and taking the result modulo 26 if it is greater than 25. The result will be `24`, which corresponds to the letter `y`._
+Vamos pegar `w` (a primeira letra do texto que estamos encriptando) e `c` (a letra da palavra-chave logo abaixo). Então `w` é encriptada pegando seu valor inteiro, `22`, o valor inteiro de `c`, `2`, somando os dois e pegando o resultado módulo 26, se ele for maior que 25. O resultado será `24`, que corresponde à letra `y`.
 
-The encryption of `e` is the sum of its value `4` and the value of `i` (the letter written under `e`) modulo 26, so it's `4 + 8 = 12`, which is `m`. 
+_The encryption of `e` is the sum of its value `4` and the value of `i` (the letter written under `e`) modulo 26, so it's `4 + 8 = 12`, which is `m`._
+A encriptação do `e` é a soma do seu valor `4` com o valor de `i` (a letra abaixo de `e`) módulo 26, então ela é `4 + 8 = 12`, que é `m`.
 
-If you continue the process, you will get the following result (the third line below):
+_If you continue the process, you will get the following result (the third line below):_
+Se você continuar o processo, você vai obter o seguinte resultado (a terceira linha):
 ```
 welcometoclojurebridge
 cipherciphercipherciph
 ymajsdgbdjpflcglfiklvl 
 ```
-Note that the two letters `e` in "welcome" are encoded differently: as `m` in the first case, and as `g` in the second. This hides patterns in the text and doesn't allow frequency analysis the way we did it for Caesar cipher since the same occurrence of a letter in ciphertext may've come from different letters in the original text. 
+_Note that the two letters `e` in "welcome" are encoded differently: as `m` in the first case, and as `g` in the second. This hides patterns in the text and doesn't allow frequency analysis the way we did it for Caesar cipher since the same occurrence of a letter in ciphertext may've come from different letters in the original text._
+Note que as duas letras `e` em "welcome" são encodadas de maneira diferente: como `m` no primeiro caso e `g` no segundo. Isso esconde padrões no texto e não permite análise de frequência como nós fizemos com a cifra de César, já que a ocorrência da mesma letra em um texto cifrado pode vir de letras diferentes do texto original. 
 
-**Exercise** Write a function `encrypt-letter` that, given two characters, returns the first one encrypted with the second one. For instance, given `\w` and `\c`, it returns `\y`. Make sure to test it on examples in which addition results in a number higher than 25 (encrypting `\u` with `\i`, for instance, gives `\c`). 
+_**Exercise** Write a function `encrypt-letter` that, given two characters, returns the first one encrypted with the second one. For instance, given `\w` and `\c`, it returns `\y`. Make sure to test it on examples in which addition results in a number higher than 25 (encrypting `\u` with `\i`, for instance, gives `\c`)._
+**Exercise** Escreva uma função `encrypt-letter` que, dados dois caracteres, retorna o primeiro encriptado com o segundo. Por exemplo, dados `\w` e `\c`, ela retorna `\i`. Não se esqueça de testá-la com valores para os quais a adição resulte em um número maior que 25 (encriptar `\u` com `\i`, por exemplo, resulta em `\c`).
 
 ## Encrypting and decrypting with Vigenere cipher
 *Relevant functions:* [cycle](https://clojuredocs.org/clojure.core/cycle) (new), [map](https://clojuredocs.org/clojure.core/map), [mapv](https://clojuredocs.org/clojure.core/mapv) revisited. 
