@@ -2,7 +2,7 @@
 
 ## Resumo da cifra
 _Vigenere cipher addresses two main weaknesses of Caesar cipher: Caesar cipher has only 26 keys, and all occurrences of a letter are always encoded by the same letter in the encrypted text._
-A cifra de Vignere resolve duas fraquezas principais da cifra de César: a de César tem apenas 26 chaves, e todas as ocorrências de uma letra são sempre encodadas pela mesma letra no texto encriptado.
+A cifra de Vigenere resolve duas fraquezas principais da cifra de César: a de César tem apenas 26 chaves, e todas as ocorrências de uma letra são sempre encodadas pela mesma letra no texto encriptado.
 
 _Here is how it works: we pick a key which is a word. Let's use the word "cipher". The phrase we would like to encrypt is "Welcome to ClojureBridge!", which turns into "welcometoclojurebridge" after removing non-letters and converting to all lowercase._
 Como funciona: nós escolhemos uma chave que é uma palavra. Vamos usar a palavra "cipher". A frase que gostaríamos de encriptar é "Welcome to ClojureBridge!", que se torna "welcometoclojurebridge" depois de remover caracteres especiais e de converter tudo para minúsculo.
@@ -31,33 +31,43 @@ _Note that the two letters `e` in "welcome" are encoded differently: as `m` in t
 Note que as duas letras `e` em "welcome" são encodadas de maneira diferente: como `m` no primeiro caso e `g` no segundo. Isso esconde padrões no texto e não permite análise de frequência como nós fizemos com a cifra de César, já que a ocorrência da mesma letra em um texto cifrado pode vir de letras diferentes do texto original. 
 
 _**Exercise** Write a function `encrypt-letter` that, given two characters, returns the first one encrypted with the second one. For instance, given `\w` and `\c`, it returns `\y`. Make sure to test it on examples in which addition results in a number higher than 25 (encrypting `\u` with `\i`, for instance, gives `\c`)._
-**Exercise** Escreva uma função `encrypt-letter` que, dados dois caracteres, retorna o primeiro encriptado com o segundo. Por exemplo, dados `\w` e `\c`, ela retorna `\i`. Não se esqueça de testá-la com valores para os quais a adição resulte em um número maior que 25 (encriptar `\u` com `\i`, por exemplo, resulta em `\c`).
+**Exercício** Escreva uma função `encrypt-letter` que, dados dois caracteres, retorna o primeiro encriptado com o segundo. Por exemplo, dados `\w` e `\c`, ela retorna `\i`. Não se esqueça de testá-la com valores para os quais a adição resulte em um número maior que 25 (encriptar `\u` com `\i`, por exemplo, resulta em `\c`).
 
-## Encrypting and decrypting with Vigenere cipher
-*Relevant functions:* [cycle](https://clojuredocs.org/clojure.core/cycle) (new), [map](https://clojuredocs.org/clojure.core/map), [mapv](https://clojuredocs.org/clojure.core/mapv) revisited. 
+_## Encrypting and decrypting with Vigenere cipher_
+## Encriptando e decriptando com a cifra de Vigenere
+_*Relevant functions:* [cycle](https://clojuredocs.org/clojure.core/cycle) (new), [map](https://clojuredocs.org/clojure.core/map), [mapv](https://clojuredocs.org/clojure.core/mapv) revisited._
+*Funções relevantes:* [cycle](https://clojuredocs.org/clojure.core/cycle) (nova), [map](https://clojuredocs.org/clojure.core/map), [mapv](https://clojuredocs.org/clojure.core/mapv) revisitada. 
 
-Now we are going to use `mapv` to encrypt longer texts. 
+_Now we are going to use `mapv` to encrypt longer texts._
+Agora nós vamos usar `mapv` para encriptar textos mais longos.
 
-To do that, we consider a slightly different example of using `mapv` (or `map`): we can use it with multiple sequences. The simplest example is:
+_To do that, we consider a slightly different example of using `mapv` (or `map`): we can use it with multiple sequences. The simplest example is:_
+Para isso, consideremos um jeito um pouco diferente de como usar `mapv` (ou `map`): nós podemos usá-las com múltiplas sequências. O exemplo mais simples é:
 ```clojure
 (mapv + [6 7 8] [3 2 1]) ; [9 9 9]
 (mapv - [6 7 8] [3 2 1]) ; [3 5 7]
 ```
-Here `mapv` applies the given function (`+` in the first example, and `-` in the second case) to the first elements of the two given vectors, then to the second ones, etc. 
+_Here `mapv` applies the given function (`+` in the first example, and `-` in the second case) to the first elements of the two given vectors, then to the second ones, etc._
+Aqui `mapv` aplica a função dada (`+` no primeiro exemplo e `-` no segundo) aos primeiros elementos dos vetores, depois aos segundos, etc.
 
-Of course, we can use it with anonymous functions as well; the function must have two arguments:
+_Of course, we can use it with anonymous functions as well; the function must have two arguments:_
+Claro, nós podemos usá-la com uma função anônima também; a função deve ter dois argumentos:
 ```clojure
 (mapv #(if (< %1 %2) %1 %2) [2 4 5] [3 6 1]) ; [2 4 1]
 ```
-In this case the anonymous function returns the smaller of its two arguments. Thus, given `2` and `3`, it returns `2`, which is the first element of the result. Then given `4` and `6`, it returns `4`, etc.
+_In this case the anonymous function returns the smaller of its two arguments. Thus, given `2` and `3`, it returns `2`, which is the first element of the result. Then given `4` and `6`, it returns `4`, etc._
+Nesse caso a função anônima retorna o menor dos seus dois argumentos. Então, dados `2` e `3`, ela retorna `2`, que é o primeiro elemento do resultado. Depois, dados `4` e `6`, ela retorna `4`, etc.
 
-**Exercise:** Use `mapv` to compute the sum of squares of the elements of the given vectors. For instance, given `[1 2]` and `[3 1]`, it would return the vector `[10 5]`. 
+_**Exercise:** Use `mapv` to compute the sum of squares of the elements of the given vectors. For instance, given `[1 2]` and `[3 1]`, it would return the vector `[10 5]`._
+**Exercício:** Use `mapv` para computar a soma dos quadrados dos elementos dos vetores dados. Por exemplo, passando `[1 2]` e `[3 1]`, ela retornaria o vetor `[10 5]`.
 
-Here is a cool feature: if one the given sequences is longer than the other, the result is as long as the shorter sequence, and the remaining elements are ignored:
+_Here is a cool feature: if one the given sequences is longer than the other, the result is as long as the shorter sequence, and the remaining elements are ignored:_
+Aqui uma funcionalidade legal: se uma das sequências passadas é maior do que a outra, o resultado tem o mesmo tamanho da sequência menor, e os elementos restantes são ignorados:
 ```clojure
 (mapv + [6 7 8] (range)) ; [6 8 10]
 ```
-This allows us to use a `cycle` function to generate an infinite sequence of repeated keyword and then "add" it to text to be encrypted. `cycle` takes a sequence and creates an infinite lazy sequence by repeating the given sequence. For instance,  
+_This allows us to use a `cycle` function to generate an infinite sequence of repeated keyword and then "add" it to text to be encrypted. `cycle` takes a sequence and creates an infinite lazy sequence by repeating the given sequence. For instance,_
+Isso nos permite usar uma função `cycle` para gerar uma sequência infinita de chaves repetidas e então "adicionar" ela ao texto a ser encriptado. `cycle` recebe uma sequência e cria uma sequência lazy infinita ao repetir a sequência recebida. Por exemplo,  
 ```clojure
 (def cycle1 (cycle [1 2 3])) ; infinite cycle
 (take 10 cycle1) ; (1 2 3 1 2 3 1 2 3 1)
@@ -65,15 +75,22 @@ This allows us to use a `cycle` function to generate an infinite sequence of rep
 crypto-solutions=> (take 10 cycle2) ; (\w \o \r \d \w \o \r \d \w \o)
 ```
 
-**Exercise:** Use the cycle of a keyword "`cipher"`, `mapv` (or `map`), and the `encrypt-letter` function that you wrote earlier to encrypt the string `"welcometoclojurebridge"`. 
+_**Exercise:** Use the cycle of a keyword "`cipher"`, `mapv` (or `map`), and the `encrypt-letter` function that you wrote earlier to encrypt the string `"welcometoclojurebridge"`._
+**Exercício:** Use a `cycle` com a chave `"cipher"`, `mapv` (ou `map`), e a função `encrypt-letter`que você escreveu mais cedo para encriptar a string `"welcometoclojurebridge"`._
 
-**Exercise:** Once you get it to work, write a function `vigenere-encrypt` that takes a text to encrypt and a keyword and performs the encryption. Just like in the Caesar cipher, you need to first use `get-letters` to get rid of other symbols and convert the letters to lowercase. 
+_**Exercise:** Once you get it to work, write a function `vigenere-encrypt` that takes a text to encrypt and a keyword and performs the encryption. Just like in the Caesar cipher, you need to first use `get-letters` to get rid of other symbols and convert the letters to lowercase._
+**Exercício:** Quando você conseguir fazer ela funcionar, escreva uma função `vigenere-encrypt` que recebe um texto para encriptar e uma chave e faz a encriptação. Assim como na cifra de César, você precisa primeiro usar a `get-letters` para retirar outros símbolos e converter as letras para minúsculo. 
 
-**Exercise:** Now write a function that takes an encrypted string and a keyword and performs the decryption. Note that you will be doing subtraction modulo 26 instead of the addition. 
+_**Exercise:** Now write a function that takes an encrypted string and a keyword and performs the decryption. Note that you will be doing subtraction modulo 26 instead of the addition. 
 <br />
-Make sure that when you encrypt a string with a keyword, you can get it back (except in all lowercase letters and without punctuation) by decrypting it with the same keyword. 
+Make sure that when you encrypt a string with a keyword, you can get it back (except in all lowercase letters and without punctuation) by decrypting it with the same keyword._
+**Exercício:** Agora escreva uma função que recebe uma string encriptada e uma chave e faz a decriptação. Note que você vai fazer uma subtração módulo 26 ao invés de uma adição.
+<br />
+Garanta que quando você encriptar uma string com uma chave, você possa obtê-la de volta (com todas as letras minúsculas e sem pontuação) ao decriptá-la com a mesma chave.
 
-**Exercise:** Post an encryption (with a key) on slack. Try decrypting other people's encryptions.  
+_**Exercise:** Post an encryption (with a key) on slack. Try decrypting other people's encryptions._
+**Exercício:** Poste um texto encriptado (com uma chave) no slack. Tente decriptar os textos de outras pessoas.
+
 
 ## Breaking Vigenere cipher
 It seems like a Vigenere cipher doesn't allow frequency analysis since the same letter may be encrypted in multiple different ways. However, one can actually guess a key by a process that's just slightly more complicated than breaking a Caesar cipher. It also requires a longer text. 
