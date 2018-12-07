@@ -8,9 +8,9 @@ Parte 3: [Tipos de dados e funções em Clojure](docs/3-functions.md)
 
 Parte 4: [Cifra de César](docs/4-caesar.md)
 
-Parte 5: [Hashmaps; Breaking Caesar cipher](docs/5-frequency.md)
+Parte 5: [Hashmaps; quebrando a cifra de César](docs/5-frequency.md)
 
-Parte 6: [Vigenere cipher](docs/6-vigenere.md)
+Parte 6: [Cifra de Vigenère](docs/6-vigenere.md)
 
 ### Copyright and License
 
