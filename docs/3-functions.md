@@ -8,7 +8,7 @@ A criptografia que iremos explorar nessa lição trabalha com letras que são re
 
 ## Definindo constantes e funções em Clojure
 
-Constantes são declaradas utilizando a palavra reservada `dev`:
+Constantes são declaradas utilizando a palavra reservada `def`:
 ```clojure
 (def answer 42)
 ```
