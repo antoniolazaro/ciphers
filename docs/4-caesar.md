@@ -203,7 +203,10 @@ Decriptar não requer filtrar os símbolos e convertê-los para minúsculos já 
 
 Tente decriptografar o seguinte:
 
-**TO-DO**: add
+`whqsuxeffuhmqieduevjxuvyhijfhewhqccuhievjxuxqhlqhtcqhaedusecfkjuhqdtydludjutjxuvyhijsecfybuhvehqsecfkjuhfhewhqccydwbqdwkqwuixufefkbqhyputjxuytuqevcqsxyduydtufudtudjfhewhqccydwbqdwkqwuimxysxbutjejxutulubefcudjevserebeduevjxuvyhijxywxbulubfhewhqccydwbqdwkqwuiemydwjexuhqssecfbyixcudjiqdtxuhdqlqbhqdaixumqiiecujycuihuvuhhutjeqiqcqpydwwhqsujxukidqloqhbuywxrkhausbqiiwkytutcyiiybutuijheouhkiixeffuhmqidqcutvehxuhixumqifeijxkcekiboqmqhtutjxufhuiytudjyqbcutqbevvhuutecrofhuiytudjrqhqsaerqcq` 
+
+Dica: a chave é a resposta para a vida, o universo e tudo mais ;)
+ 
 
 ## E agora?
 Encriptação e decriptação são fáceis de fazer se você sabe a chave (a quantidadade que irá mover no alfabeto). Mas e o que fazer se você não sabe? A próxima seção mostra como você pode quebrar a cifra de César sem uma chave utilizando *hashmaps* em Clojure.
