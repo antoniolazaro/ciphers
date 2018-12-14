@@ -140,9 +140,9 @@ Então tente decriptar o seguinte:
 
 **Exercício:** Encripte seus próprios exemplos e os poste no slack (com a chave), e então tente decriptar os exemplos de outros participantes postados lá. Antes de postar o seu próprio, tenha certeza que eles decriptam corretamente.
 
-## Trabahando com strings que possuem outros símbolos
+## Trabalhando com strings que possuem outros símbolos
 
-Encriptação não é particulamente útil se ela preserva letras maiúsculas, pontuação, espaços entre as palavras, e coisas similares que revelam muito sobre o texto. Portanto, em order de encriptar o texto nós iremos remover todos os símbolos que não sejam letras e iremos convertes as letras em minúsculas.
+Encriptação não é particulamente útil se ela preserva letras maiúsculas, pontuação, espaços entre as palavras, e coisas similares que revelam muito sobre o texto. Portanto, para encriptar o texto nós iremos remover todos os símbolos que não sejam letras e iremos convertes as letras em minúsculas.
 
 ### Convertendo para letras minúsculas
 ```clojure
@@ -152,9 +152,9 @@ Encriptação não é particulamente útil se ela preserva letras maiúsculas, p
 ### Removendo os símbolos que não são letras
 *Funções relevantes no clojuredocs:* [filter](https://clojuredocs.org/clojure.core/filter), [filterv](https://clojuredocs.org/clojure.core/filterv), [odd?](https://clojuredocs.org/clojure.core/odd_q)
 <br />
-*Função Jave relevante:* [isLetter](https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isLetter-char-)
+*Função Java relevante:* [isLetter](https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isLetter-char-)
 
-Agora iremos utilizar outra função de alta ordem, `filterv`, para remover todas os caracteres que não são letras de uma string. Ela revebe uma função que retorna um valor `true` ou `falso` e um vetor, e retorna um novo vetor somente com aqueles elementos que a função passada retornou `true`.
+Agora iremos utilizar outra função de alta ordem, `filterv`, para remover todos os caracteres que não são letras de uma string. Ela recebe uma função que retorna um valor `true` ou `false` e um vetor, e retorna um novo vetor somente com aqueles elementos que a função passada retornou `true`.
 
 Por exemplo, se nós quisermos utilizar a função `odd?` (ímpar) que funciona assim: `odd? 5` retorna `true`, `odd? 4` retorna `false`. Se nós quisermos manter apenas os inteiros ímpares de uma dada sequência, nós podemos utilizar `filterv` com `odd?`.
 
@@ -162,7 +162,7 @@ Por exemplo, se nós quisermos utilizar a função `odd?` (ímpar) que funciona 
 filterv odd? [6 7 -1 0 5]) ; resulta em [7 -1 5]
 ```
 
-Note que `filterv` é um vetor análógico de uma função mais comum (mas menos conveniente no nosso caso) `filter`, assim como `mapv` é um vetor analógico de `map`.
+Note que `filterv` é um vetor analógico de uma função mais comum (mas menos conveniente no nosso caso) `filter`, assim como `mapv` é um vetor analógico de `map`.
 
 Assim como `mapv`, `filterv` também pode receber funções anônimas:
 ```clojure
@@ -177,7 +177,7 @@ Nós iremos utilizar o método Java da classe `Character` para checar se o carac
 (Character/isLetter \?) ; false
 ```
 
-**Exercício:** escreva uma função `get-letters` que recebe uma string com qualquer símbolo nela, e retorna uma string contendo apenas letras, onde todas as letras são converidas para minúsculas, como no exemplo abaixo:
+**Exercício:** escreva uma função `get-letters` que recebe uma string com qualquer símbolo nela, e retorna uma string contendo apenas letras, onde todas as letras são convertidas para minúsculas, como no exemplo abaixo:
 ```clojure
 (get-letters "Hello, friend!") ; "hellofriend"
 ```
@@ -190,16 +190,16 @@ A sequência de passos que você precisa reproduzir é:
 Você pode querer primeiramente tentar os passos no REPL, e então juntá-los em uma função.
 
 ## Encriptando e decriptando texto com a cifra de César
-Agora você está pronta para fazer a encriptação e decriptação com a cifra de César em strings inteiras de texto. O resultado será tudo em letra minúsculas e sem sinais de pontuação, mas ainda estará legível.
+Agora você está pronta para fazer a encriptação e decriptação com a cifra de César em strings inteiras de texto. O resultado será tudo em letras minúsculas e sem sinais de pontuação, mas ainda estará legível.
 
-A sequência de passos para encriptação irá requerer você que:
+A sequência de passos para encriptação irá requerer que você:
 
 1. Utilize `get-letters` para pegar uma string somente com letras (minúsculas) do texto que você está tentando encriptar;
 2. Encripte esta string utilizando sua função `caesar-encrypt`.
 
 Como um exemplo de teste, `"Hello, friend!"` com a chave 5 encripta para `"mjqqtkwnjsi"`.
 
-Decriptar não requer filtrar os símbolos e convertê-los para minúculos já que as strings encriptadas já estão no formato correto, então você pode utilizar a função `caesar-decrypt`.
+Decriptar não requer filtrar os símbolos e convertê-los para minúsculos já que as strings encriptadas já estão no formato correto, então você pode utilizar a função `caesar-decrypt`.
 
 Tente decriptografar o seguinte:
 
