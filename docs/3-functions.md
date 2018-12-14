@@ -21,7 +21,7 @@ Funções em Clojure são declaradas como uma expressão entre parênteses que i
   [x y]
   (+ x y 100))
 ```
-define uma função `f` que recebe dois parâmetros, `x` e `y`, e retorna a suma deles mais `100`.
+define uma função `f` que recebe dois parâmetros, `x` e `y`, e retorna a soma deles mais `100`.
 
 Você pode chamar essa função como
 ```clojure 
@@ -41,7 +41,7 @@ Isso irá retornar `105`.
 
 Agora nós iremos escrever algumas funções de conversão entre os tipos `int` e `char`.
 
-A conversão que nõs gostaríamos de realizar é para representar as 26 letras do alfabeto como números `0, 1, 2,..., 25`, onde `a = 0`, `b = 1`, etc.
+A conversão que nós gostaríamos de realizar é para representar as 26 letras do alfabeto como números `0, 1, 2,..., 25`, onde `a = 0`, `b = 1`, etc.
 
 Caracteres em Clojure são escritos com uma contra barra na frente. Por exemplo, o caractere `x` é escrito como `\x`.
 
