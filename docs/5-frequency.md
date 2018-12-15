@@ -1,16 +1,20 @@
-# Clojure maps and frequency analysis 
+# Mapas Clojure e análise de frequência
 
-## Frequency analysis for breaking ciphers
+## Análise de frequência para quebrar cifras
 
-English language, as most languages, has an even distribution of letters. The most frequent letter in English is `e`, which, on average, constitutes close to 13% of English texts, followed by `t` (about 9%) and `a` (a bit over 8%). The least frequent letter is `z` which occurs less than 0.1%.
+A língua inglesa, como a maioria dos idiomas, tem uma distribuição uniforme de letras. A letra mais frequente em Inglês
+é o `e` que, na média, constitui aproximadamente 13% dos textos, seguida das letras `t` (cerca de 9%) e `a` (8%). A
+letra menos frequente é o `z`, com menos de 0.1% de ocorrência.
+Uma distribuição completa das letras em Inglês pode ser encontrada aqui: [Relative frequencies of letters in the English language (wikipedia)](https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language). Abra esse link numa nova aba, pois ele pode ser necessário mais tarde.
 
-A complete distribution of English letters is given here: [Relative frequencies of letters in the English language (wikipedia)](https://en.wikipedia.org/wiki/Letter_frequency#Relative_frequencies_of_letters_in_the_English_language) You might want to open this link in a new tab since you would need it. 
+A distribuição não uniforme de letras e o fato de que cada letra gera sempre a mesma letra correspondente na versão
+criptografada permitem que a a cifra de Caesar seja quebrada (isto é, que a chave seja encontrada) de maneira muito mais
+rápida do que simplesmente tentar todas as chaves possíveis e verificar se o resultado contém palavras que façam
+sentido. Essa estratégia é chamada de *análise de frequência*.
 
-The non-even distribution of letters and the fact that every letter is always encrypted by the same letter (no matter where it appears in the text) allow breaking a Caesar cipher encryption (i.e. finding out the key) much faster than trying all possible keys and looking if the encryption contains any words. This approach is known as *frequency analysis*. 
+Note que precisamos de um texto em Inglês relativamente longo para que a análise de frequência funcione: apenas uma palavra não é suficiente.
 
-Note that we need a somewhat long English text in order to do frequency analysis: a single word is not enough. 
-
-Our example will be this text encrypted with Caesar cipher with an unknown key:
+Noss exemplo usará o seguinte exto criptografad usando a cifra de Caesar com uma chave desconhecida:
 
 ```clojure
 "radyjgtxhpsncpbxrvtctgpaejgedhtegdvgpbbxcvapcvjpvtrdbqxcxcv
@@ -19,185 +23,196 @@ vtlxiwpctuuxrxtcipcsgdqjhixcugphigjrijgtudgbjaixiwgtpstsegdvg
 pbbxcvo"
 ```
 
-## Clojure hashmaps
+## Hashmaps Clojure
 
-*Relevant functions:* [assoc](https://clojuredocs.org/clojure.core/assoc), [zipmap](https://clojuredocs.org/clojure.core/zipmap)
+*Funçoẽs relevantes* [assoc](https://clojuredocs.org/clojure.core/assoc), [zipmap](https://clojuredocs.org/clojure.core/zipmap)
 
-A convenient way of storing of frequencies is a Clojure collection type known as a *hashmap*, also referred to as just a *map* - just don't confuse it with a function `map`. 
+Uma maneira conveniente de guardar as frequências é um tipo de coleção Clojure chamada *hashmap*, também conhecida como *map*, simplesmente. Tome cuidado para não confundir com a função *map*.
 
-A map is a sequence of pairs of a key and a value. It is written in curly braces. For instance, `{"apple" 2, "banana" 3}` is a map with a key `"apple"` bound to a value `2`, and a key `"banana"` bound to a value `3`. 
+Um mapa é uma sequência de pares "chave-valor". São escritos usando chaves; por exemplo, `{"maçã" 2, "banana" 3}` é um mapa com uma chave `"maçã"` relacionada com um valor `2`, e uma chave "banana" relacionada com um valor `3`.
 
-Keys and values can be anything: numbers, strings, vectors, etc. It is common to use a special Clojure type known as a *keyword* for keys, as it may make lookups in larger maps slightly faster, but this is by no means required. Keywords in Clojure are written like this: `:apple`. 
+Chaves e valores podem ser qualquer coisa: números, strings, vectors, etc. É comum utilizar chaves de um tipo Clojure especial chamado *keyword*, dado que eles podem acelerar consultas em mapas grandes, mas isso não é necessário. Keywords em Clojure são escritas assim: `:maçã`.
 
-Since we are computing frequencies of characters, our keys will be characters, and values will be counts or percentages.
+Como estamos computando frequências de caracteres, nossas chaves serão caracteres e os valores serão contadores ou
+percentuais.
 
-Here is some of functionality of maps: 
+Aqui estão algumas funvcionalidades de mapas:
 
-1. `{}` is an empty map. 
-2. You can add elements to a map using a function `assoc` by providing a key and a value. If a key given to `assoc` is already present, the value gets replaced by the new one.  
+1. `{}` é um mapa vazio.
+2. Você pode adicionar elementos à um mapa usando a função `assoc`, passando uma chave e um valor. Se uma chave passada
+   pro `assoc` já estiver presente, o valor é substituído pelo novo.
 ```clojure
-(assoc {} "a" 3) ; results in {"a" 3}
-(assoc {"a" 3} "x" 2) ; results in {"a" 3, "x" 2}
-(assoc {"a" 3, "x" 2} "a" 5) ; results in {"a" 5, "x" 2}
+(assoc {} "a" 3) ; resultado: {"a" 3}
+(assoc {"a" 3} "x" 2) ; resultado: {"a" 3, "x" 2}
+(assoc {"a" 3, "x" 2} "a" 5) ; resultado: {"a" 5, "x" 2}
 ```
-3. The main use of maps is to be able to look up a value for a key. There is no special function that does it: the map itself serves as a function that, when passed a key, returns its value. If the key isn't found, a special value `nil` is returned:
+3. O principal caso de uso de mapas é quando precisamos consultar um valor para uma chave específica. Não existe uma função especial para fazeer isso: o próprio mapa serve como uma função que, quando passada uma chave, retorna o respectivo valor. Se a chave não for encontrada, retorna `nil`:
 ```clojure
-({"a" 3, "x" 2} "a") ; results in 3
-({"a" 3, "x" 2} \a) ; results in nil (\a is different from "a')
-({"a" 3, "x" 2} "b") ; results in nil
-({} "any") ; results in nil
+({"a" 3, "x" 2} "a") ; resultado: 3
+({"a" 3, "x" 2} \a) ; resultado: nil (\a é diferente de "a")
+({"a" 3, "x" 2} "b") ; resultado: nil
+({} "qualquer") ; resultado: nil
 ```
-4. Another way of creating a map is to give it a vector of keys and a vector of corresponding values. The function that does this is called `zipmap`:
+4. Uma outra maneira de criar um mapa é a partir de dois vetores: um com chaves e um com os valores correspondentes. A função que faz isso se chama `zipmap`:
 ```clojure
-(zipmap [\a \b] [2 5]) ; results in {\a 2, \b 5}
+(zipmap [\a \b] [2 5]) ; resultado: {\a 2, \b 5}
 ```
 
-**Exercise:** Practice with maps. For instance, create a small map of animals and their sounds (e.g. "duck"/"quack"), and look up animal sounds by the animal. 
+**Exercício:** Pratique com mapas. Por exemplo, crie um pequeno mapa de animais e seus respectivos sons ("pato"/"quack"), e depois consulte o som a partir do animal.
 
-## Counting the number of occurrences of a character 
-*Relevant functions:* [count](https://clojuredocs.org/clojure.core/count), [first](https://clojuredocs.org/clojure.core/first), [second](https://clojuredocs.org/clojure.core/second), [=](https://clojuredocs.org/clojure.core/=).
+## Contando o número de ocorrências de um caractere
+*Funçoẽs relevantes:* [count](https://clojuredocs.org/clojure.core/count), [first](https://clojuredocs.org/clojure.core/first), [second](https://clojuredocs.org/clojure.core/second), [=](https://clojuredocs.org/clojure.core/=).
 
-In order to compute frequencies of letters, we need to find out how many times each letter appears in the encrypted string. We also need to work with vectors that are pairs of a key and a value. 
+Para computar as frequências de letras, precisamos determinar quantas vezes cada letra aparece na string criptografada. Precisamos trabalhar também com vetores que são pares de chave e valor.
 
-The functions that we need for work with vectors (not necessarily all in this section) are:
+As funções que precisamos para trabalhar com vetores são:
 
-1. `count` that returns the  umber of elements in a vector: `(count ["apple" "banana"])` returns `2`.
-2. `first` returns the first element of a vector: `(first ["apple" "banana"])` returns `"apple"`. 
-3. `second` returns the second element of a vector: `(second ["apple" "banana"])` returns `"banana"`, so does `(second ["apple" "banana" "kiwi"])`
+1. `count` retorna o número de elementos de um vetor: `(count ["maçã" "banana"])` retorna `2`.
+2. `first` retorna o primeiro elemento de um vetor: `(first ["maçã" "banana"])` retorna `"maçã"`.
+3. `second` retorna o segundo elemento de um vetor: `(second ["maçã" "banana"])` retorna `"banana"`, assim como `(second ["maçã" "banana" "kiwi"])`
 
-Note that these functions also work with sequences (we will see those later). 
+Note que essas funçoẽs também funcionam com qualquer sequência (vamos explorar elas mais tarde).
 
-Now we are back to writing Clojure functions. We need to write a function `count-letters` that, given a character and a string, would return the number of occurrences of this character in the string. For instance,
+Agora estamos de volta a escrever funções Clojure. Precisamos escrever uma função `count-letters` que, dado um caractere e uma string, reornaria o número de ocorrências desse caractere na string. Por exemplo:
 ```clojure
 (count-letters \a "aadvark") ; 3
 (count-letters \x "aadvark") ; 0
 ```
 
-One (not the most efficient, but straightforward) way is filter out all the other characters, and then return the count of the result. In Clojure `=` is a function that can be used on any two objects (be it numbers, strings, vectors, etc.). For instance, `(= (/ 6 2) 3)` returns `true` (note that `(/ 6 2)` is the result of dividing 6 by 2), and `(= "97" 97)` returns `false` since a string is not equal to a number. 
+Uma maneira (que não é a mais eficiente, mas é simples) é filtrar todos os outros caracteres and retornar a quantidade de caracteres restantes. Em Clojure, `=` é uma função que pode ser usada em quaisquer dois valores (sejam números, strings, vetores, etc). Por exemplo, `(= (/ 6 2) 3)` retorna `true` (note que `(/6 2)` é o resultado de dividir 6 por 2), e `(="97" "97")` retorna `false`, dado que uma string não é igual a um número.
 
-Here we need to use `filterv` with an anonymous function that checks if its parameter is equal to the given character, and then we need to return the `count` of the result.  
+Aqui precisamos usar a função `filerv` com uma função anônima que checa se o seu parâmetro é igual ao caractere em questão, e então precisamos retornar a quantidade restante.
 
-**Exercise:** Look at your previous function that uses `filterv`, and then write a call to `filterv` to filter out all characters other than `\a` in the word `"aadvark"`. Once you have accomplished this task, make it into a function `count-letters` that works as in the example above. Try it on a different word and with a different character.
+**Exercício:** Veja sua função anterior que usa `filterv` e então escreva uma chamada de `filterv` para tirar os
+caracteres que não sejam `\a` na palavra `"aadvark"`. Após isso, defina uma função `count-letters` que funcione como especificado no exemplo acima. Tente usá-la em uma palavra diferente e com um caractere diferente.
 
-## Clojure lazy sequences, ranges
-*Relevant functions:* [range](https://clojuredocs.org/clojure.core/range), [take](https://clojuredocs.org/clojure.core/take), [drop](https://clojuredocs.org/clojure.core/drop)
+## Sequências preguiçosas e intervalos
+*Funçoẽs relevantes:* [range](https://clojuredocs.org/clojure.core/range), [take](https://clojuredocs.org/clojure.core/take), [drop](https://clojuredocs.org/clojure.core/drop)
 
-Data is often organized in a sequential way: the first element, then the second, etc. Most of Clojure predefined functions work with data in a sequential way, processing elements one after another. 
-So far the only sequential collections of data that we have seen were vectors. However, a lot of sequential data in Clojure is given by sequences. The interesting feature of Clojure is that sequences are *lazy*, i.e. they can be potentially infinite, but only the portion of the sequences that's being used is *realized*, i.e. evaluated. 
+Dados são comumente organizados de forma sequencial: o primeiro elemento, depois o segundo, etc. A maioria das funções Clojure predefinidas funcionam com dados sequenciais, processando elementos um depois do outro.
+Até agora a única coleção de dados sequencial que vimos são vetores. Entretanto, diversos dados sequenciais em Clojure são descritos através de sequências. Uma característica interessante de Clojure é que as sequências são *preguiçosas*, isto é, elas podem ser conceitualmente inifinitas, realizando apenas a porção que de fato está sendo utilizada.
 
-One example of such lazy sequences is a range. A range is a sequence of integers, and it is generated by a function `range`. For instance, `(range 2 5)` gives you a sequence `(2 3 4)` (the upper bound is not inclusive). `(range 10)` gives you a sequence of integers from 0 to 9 (not including 10).  
+Um exemplo de sequência preguiçosa é um intervalo. Um intervalo é uma sequência de números inteiros, e é gerada por uma função `range`. Por exemplo, `(range 2 5)` retorna a sequência `(2 3 4)` (o limite superior não é inclusivo). `(range 10)` retorna uma sequência de inteiros de 0 a 9.
 
-You can try the above examples in REPL. What you shouldn't try in REPL, however, is a call to ` range` with no parameters: `(range)`. This gives you a sequence of integers from 0 to infinity! However, you can store this sequence in a variable, since this will not evaluate it:
+Você pode tentar os exemplos acima no REPL. O que você não deveria tentar no REPL, entretanto, é chamar `range` sem parâmetros: `(range)`. Isso retorna uma sequência de inteiros de 0 ao inifito! Porém, você pode guardar essa sequência em uma variável, já que isso não vai realizá-la:
 ```clojure
 (def inf (range))
 ```
-Now you can take as many elements of it as you need, using the function `take`:
+Agora voc^pode pegar quantos elementos quiser usando a função `take`:
 ```clojure
-(take 20 inf) ; integers from 0 to 19
-(take 100 inf) ; integers from 0 to 99
+(take 20 inf) ; inteiros de 0 a 19
+(take 100 inf) ; inteiros de 0 a 99
 ```
-`take` has a complementary function `drop` that drops the first `n` elements. Using `drop` on an infinite sequence would produce an infinite sequences. 
+`take` tem uma função complementar chamada `drop`, que descarta os `n` primeiros elemntos. Usar `drop` em um
+equência infinita produz uma outra sequência inifita.
 
-Now going back to descriptions of `map` and `filter`, you would notice that they both return lazy sequences. For instance, you can define an infinite sequence of even numbers by filtering an infinite range with the `even?` function:
+Agora voltando para as definições de `map` e `filter`, você pode notar que as duas retornam sequências preguiçosas. Por exemplo, você pode definir uma sequência infinita de números pares aplicando um filtro `even?` em uma sequência infinita com todos os números.
 ```clojure
 (def evens (filter even? (range)))
 (0 2 4 6 8 10 12 14 16 18) ; even integers from 0 to 18
 ```
-Also note that `mapv` and `filterv` aren't lazy (such functions are called *eager*), so replacing `filter` by `filterv` above would lead to an infinite evaluation. 
 
-Feel free to explore laziness more by studying [sequences functions in clojuredocs](https://clojuredocs.org/quickref). 
+Note também que `mapv` e `filterv` não são preguiçosas (essas funções são chamadas "ansiosas"), então substituir
+`filter` por `filterv` no exemplo acima levaria a uma avaliação inifita.
 
-We will be using a finite range to compute frequencies of letters, but we will come back to potentially infinite lazy sequences in the next section on Vigenere cipher. 
+Sinta-se livre para explorar sequências preguiçosas procurando por [sequence functions no clojuredocs](https://clojuredocs.org/quickref).
 
-However, for now we need to create a sequence of 26 English letters. Rather than typing it in, we will create a range of 26 first integers and then apply the `to-char` function that you wrote previously.  
+
+Nós vamos utilizar um intervalo finito para computar frequências de letras, mas vamos voltar para sequências preguiçosas potencialmente inifinitas na próxima seção, sobre a cifra de Vinegere.
+
+Por enquanto precisamos criar uma sequência de 26 letras. Em vez de digitá-las, vams criar um intervalo dos 26 primeiros inteiros e aplicar a função `to-char` que escrevemos previamente.
 ```clojure
 (def alphabet (map to-char (range 26)))
-```  
-You can use `map` or `mapv` here, it doesn't matter since we will be using the entire finite sequence anyway. 
+```
+Você pode usar `map` ou `mapv` aqui, dado que utilizaremos a sequência finita inteira de qualquer forma.
 
-Check that `alpahbet` does indeed have all characters of English alphabet in order. 
+Verifique que `alphabet` de fato contém todos os caracteres em order.
 
-## Creating a hashmap of letter counts
-Now we are all set to put together a function that takes a string and returns a hashmap of the number of times each letter appears in the string. 
+## Criando um hashmap de quantidade de letras
+Agora estamos prontos pra construir a função que recebe uma string e retorna um hashmap com o número de vezes que cada letra aparece na string.
 
-Let's revisit the encrypted text we are trying to break, and save it in a variable:
+Vamos revisitar o text criptografado que estamos tentando quebrar e  salvá-lo em uma variável:
 ```clojure
 (def encr1 "radyjgtxhpsncpbxrvtctgpaejgedhtegdvgpbbxcvapcvjpvtrdbqxcxcv
 iwtpeegdprwpqxaxinpcsxcitgprixktstktadebtciduphrgxeixcvapcvjp
 vtlxiwpctuuxrxtcipcsgdqjhixcugphigjrijgtudgbjaixiwgtpstsegdvg
 pbbxcvo")
 ```
-We assume that you have the function `count-letters` and the variable `alphabet` defined as we discussed above.
 
-You might want to revisit `mapv` and `zipmap` examples before working on this. 
+Assumimos que você tem uma função `count-letters` e a variável `alphabet` definidas, como discutido acima.
 
-**Exercise:** Construct a hashmap of the number of occurrences of each letter in the string `encr1`. Here is a sequence of steps that accomplishes the task:
+Você talvez queira revistar os exemplos de `mapv` e `zipmap` antes de começar a trabalhar nos próximos passos.
 
-1. Use `map` (or `mapv`) and `count-letters` to find the number of occurrences of each letter of the `alphabet` in the string `encr1`. If this sounds complicated, we are actually showing a solution for this below. 
-2. Use `zipmap` on `alphabet` and the result of step 1 to "zip" the counts with the alphabet into a hash map.  
+**Exercício:** construa um hashmap do número de ocorrências de cada letra na string `encr1`. Aqui está a sequencia de passos que resolvem o problema:
 
-If it all works, you should get the following map:
+1. Use `map` (ou `mapv`) e `count-letters` para encontrar o número de ocorrências de cada letra contido em `alphabet` na string `encr1`. Se isso parecer complicado, acompanhe a solução apresentada abaixo.
+2. Use `zipmap` em `alphabet` e o resutlado do primeiro passo para "zipar" os contadores com o alfabeto, criando um novo hashmap.
+
+Se tudo correr corretamente, você deve terminar com um mapa como esse:
 ```clojure
 {\a 7, \b 8, \c 16, \d 10, \e 8, \f 0, \g 16, \h 5, \i 13, \j 8, \k 2, \l 1, \m 0, \n 2, \o 1, \p 19, \q 3, \r 8, \s 6, \t 17, \u 5, \v 11, \w 4, \x 17, \y 1, \z 0}
 ```
 
-**Solution for step 1 of the previous exercise:**
-We need to map over the alphabet, computing the counts for each letter. Thus we will be passing each letter to the anonymous function, on eby one, as the `%` parameter:
+**Solução do primeiro passo do exercício anterior:**
+Precisamos "mapear" o alfabeto, computando os contadores para cada letra. Logo, vamos passar cada letra para a função anônima, uma por uma, como o parâmetro `%`:
 ```clojure
 (map #(count-letters % encr1) alphabet)
 ```
 
-**Exercise:** Make your solution of the previous exercise into a function that takes a string and returns . Pass `enrc1` to it to make sure that it returns the right result. 
+**Exercício:** Transforme sua solução para o exercício anterior em uma função que recebe uma string e retorna as
+frequências. Passe a string `encr1` para ela para testar se o resultado está correto.
 
-## Clojure sorting
-*Relevant functions:* [sort-by](https://clojuredocs.org/clojure.core/sort-by)
+## Ordenação em Clojure
+*Funções relevantes:* [sort-by](https://clojuredocs.org/clojure.core/sort-by)
 
-Now that we got the hashmap of counts, we need to find the most frequently occurring letters. We should expect that among them there are the three most commonly occurring English letters: `e, t, a`. This narrows the choices of the key enough to  start checking them until we find a key that a produces recognizable English text. 
+Agora que temos o hasmao com os contadores, precisamos achar a letra que ocorre mais frequentemente. É esperado que entre elas estejam as três letras mais comuns no idioma Inglês: `e, t, a`. Isso reduz suficientemente as possibilidades de chaves para tentarmos gerar encontrar uma que produz um text reconhecível em Inglês.
 
-We can just look at the hashmap and find the most frequent letters, but it's more convenient to sort it by the counts. The function that accomplishes this is `sort-by`: it is given 
-any sequence and a function that tells how elements should be sorted. For instance, given a sequence of pairs of numbers, we can sort by the first element of the pair:
+Podemos simplesmente olhar para o hasmap e encontrar as letras mais frequentes, mas é mais conveniente ordená-lo pela frequência. A função que faz isso é `sort-by`: ela recebe qualquer sequência e uma função que diz como os elementos devem ser ordenados. Por exemplo, dada uma sequência de pares de números, podemos ordenar pelo primeiro elemento do par:
 ```clojure
-(sort-by first [[1 2] [2 2] [2 3]]) ; results in ([1 2] [2 2] [2 3])  
+(sort-by first [[1 2] [2 2] [2 3]]) ; resultado: ([1 2] [2 2] [2 3])
 ```
-Even better, we can specify if we want this order increasing or decreasing: 
+Melhor, podemos especificar que queremos ordem crescente ou descrescente:
 ```clojure
-(sort-by first > [[1 2] [2 2] [2 3]]) ; results in ([2 2] [2 3] [1 2])
+(sort-by first > [[1 2] [2 2] [2 3]]) ; resultado: ([2 2] [2 3] [1 2])
 ```
 
-A hashmap is a collection of key/value pairs, and therefore behaves the same as a vector of vectors. The only difference is that we cannot have two of the same keys in a hashmap, so we have changed the above example slightly:  
+Um hashmap é uma coleção de pares chave/valor, logo se comporta da mesma maneira que vetores de vetores. A única
+diferença é que não podemos ter a mesma chave com valores diferentes em um hasmap:
 ```clojure
-(sort-by first > {1 2, 4 2, 2 3}) ; results in ([4 2] [2 3] [1 2])
+(sort-by first > {1 2, 4 2, 2 3}) ; resultado: ([4 2] [2 3] [1 2])
 ```
-We need to sort our hashmap by the second element of each vector (the number of occurrences of a letter is the value, not the key). Note that we need to sort in decreasing order, as in the above example. 
+Precisamos ordenar nosso hashmap pelo segundo elemento de cada par (o número de ocorrências de uma letra é o valor, não a chave). Note que precisamos ordenar em ordem decrescente, como no exemplo acima.
 
-**Exercise:** write an expression that sorts the hashmap. 
-The result should be: 
+**Exercício:** escreva uma expressão que ordene o hashmap.
+The result should be:
 ```clojure
 ([\p 19] [\t 17] [\x 17] [\c 16] [\g 16] [\i 13] [\v 11] [\d 10] [\b 8] [\e 8] [\j 8] [\r 8] [\a 7] [\s 6] [\h 5] [\u 5] [\w 4] [\q 3] [\k 2] [\n 2] [\l 1] [\o 1] [\y 1] [\f 0] [\m 0] [\z 0])
 ```
 
-We can also take the first three elements of this map using `take`. 
+Podemos também pegar os três primeiros elementos desse mapa usando `take`.
 
-**Exercise** Write a function that, given a hashmap of characters and their counts, returns the highest occurring elements and their counts: `([\p 19] [\t 17] [\x 17])`.
+**Exercício:* escreva uma função que, dado um hashmap de caracteres e suas frequências, retorna os três elementos mais frequentes e suas frequências: `([\p 19] [\t 17] [\x 17])`
 
-## Computing the cipher key
+## Computando a chave da cifra
 
-The only remaining task now is to guess the values of the keys and try them. The most common three English letters are `e,t,a`, and there is a very high probability that one of them corresponds to `\p` in the encryption. 
+A única tarefa restante agora é adiinhar os valores das chaves e tentá-los. As três letras mais comuns no idioma Inglês são `e, t, a`, e há uma grande probablilidade de uma delas correspoder ao `\p` na mensagem criptografada.
 
-Let's suppose `\p` is an encryption for `\e` (this may or may not be true). We have obtained `\p` from `\e` by converting both of them to their integer value, adding the key, and taking the result modulo 26. Thus, in order to find the key we need to subtract the integer value of `\e` from the integer value of `\p` and take the result modulo 26. 
+Vamos supor que `\p` seja o valor criptografado de `\e` (isso pode ou não ser verdade). Nós obtemos `\p` a partir de `\e` convertendo os dois para seus valores numéricos, somando a chave e determinando o resto da divisão por 26.
 
-**Exercise:** Write the above computation as a formula (or, better yet, a function that takes two characters returns a potential key). 
+**Exercício:** Escreva a computação acima como uma função que recebe dois caracteres e retorna uma possível chave.
 
-**Exercise:** Try decrypting the text with the key that you computed. If it doesn't work, try other likely options (`\p` can also stand for `\t` or `\a`). One of these should give you the correct key. 
+**Exercício:** Tente descriptografar o texto com a chave que você computou. Se não funcionar, tente outras opções
+prováveis (`\p` pode também significar `\t` ou `\a`). Uma dessas opções deve gerar a chave correta.
 
-**Exercise:** Now try this approach on the string "ahixblmaxmabgzpbmayxtmaxklmatmixkvaxlbgmaxlhnetgwlbgzlmaxmngxpbmahnmmaxphkwltgwgxoxklmhiltmtee".
 
-**Exercise:** Also, try uploading your own longer examples of encryption (but not the key) to slack and try figuring out the keys for other examples uploaded there. Make sure they are long enough for frequency analysis. Use only English texts.
+**Exercício:** Agora tente essa estratégia na string "ahixblmaxmabgzpbmayxtmaxklmatmixkvaxlbgmaxlhnetgwlbgzlmaxmngxpbmahnmmaxphkwltgwgxoxklmhiltmtee".
 
-## What's next? 
+**Exercício:** Tente também fazer upload dos seus exemplos mais longos (mas não a chave) para o Slack e tente descobrir a chave dos outros exemplos que encontrados lá. Garanta que eles são longos o suficiente para que seja feita análise de frequência. Use apenas textos escritos em inglês.
 
-Obviously, Caesar cipher isn't at all secure. However, there is a more complicated, better cipher that extends the idea of an alphabet shift: it's Vigenere cipher explained in the next section. 
+## Próximos passos
 
-**Next:** [Vigenere cipher](6-vigenere.md)
+Obviamente, a cifra de Caesar não é segura. Entretanto, exsite uma cifra mais complexa e melhor, que extende a ideia de um "deslocamento" do alfabeto: a cifra de Vigenere, explicada na próxima seção.
+
+**Próxima:** [Cifra de Vigenere](6-vigenere.md)
 <br />
-**Previous:** [Caesar cipher](4-caesar.md)
+**Anterior:** [Cifra de Caesar](4-caesar.md)
