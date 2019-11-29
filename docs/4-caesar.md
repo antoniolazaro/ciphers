@@ -73,7 +73,10 @@ Elas são normalmente utilizadas com funções de alta ordem, como `mapv`. Aqui 
 (mapv #(* % %) [1 3 -2])
 ```
 Isso retorna `[1 9 4]` (o vetor de quadrados de todos os números dados, assim como no exercício acima).
-A função anônima passada para o `map` é `#(* % %)`. É equivalente a função quadrática. O sinal `%` aqui referencia ao parâmetro da função, ela é utilizada no lugar do `x`. O `#` na frente da expressão indica que é uma função.
+A função anônima passada para o `map` é `#(* % %)`. 
+'#' é equivalente a função quadrática. 
+O sinal `%` aqui referencia ao parâmetro da função, ela é utilizada no lugar do `x`. 
+O `#` na frente da expressão indica que é uma função.
 
 **Exercício:** Utilize `mapv` e uma função anônima para retornar o oposto de cada número dado em um vetor. Por exemplo, se o vetor é`[2 -1 0 3]`, o resultado seria `[-2 1 0 -3]`.
 
