@@ -1,5 +1,9 @@
 # ClojureBridge - Escrevendo e quebrando ciphers.
 
+
+![Cesar Cipher example-min](https://user-images.githubusercontent.com/1187561/69901396-c370ec80-135f-11ea-8f9f-ea719e0dbd70.gif)
+
+
 Parte 1: [Setup do Projeto](docs/1-setup.md)
 
 Parte 2: [Visão Geral de Clojure](docs/2-functional-overview.md)
