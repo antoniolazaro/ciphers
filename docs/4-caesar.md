@@ -145,7 +145,7 @@ Então tente decriptar o seguinte:
 
 ## Trabalhando com strings que possuem outros símbolos
 
-Encriptação não é particulamente útil se ela preserva letras maiúsculas, pontuação, espaços entre as palavras, e coisas similares que revelam muito sobre o texto. Portanto, para encriptar o texto nós iremos remover todos os símbolos que não sejam letras e iremos convertes as letras em minúsculas.
+Encriptação não é particulamente útil se ela preserva letras maiúsculas, pontuação, espaços entre as palavras, e coisas similares que revelam muito sobre o texto. Portanto, para encriptar o texto nós iremos remover todos os símbolos que não sejam letras e iremos converter as letras em minúsculas.
 
 ### Convertendo para letras minúsculas
 ```clojure
